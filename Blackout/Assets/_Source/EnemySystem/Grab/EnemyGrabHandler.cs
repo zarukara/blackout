@@ -5,6 +5,7 @@ using UnityEngine;
 namespace EnemySystem
 {
     [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(EnemyStateMachine))]
     public class EnemyGrabHandler : MonoBehaviour
     {
         [Header("Grab")]
@@ -14,9 +15,7 @@ namespace EnemySystem
         [Header("Recovery")]
         [SerializeField] private float recoveryDelay = 1.5f;
 
-        private EnemyChase enemyChase;
-        private EnemyMeleeAttack enemyMeleeAttack;
-        private CharacterController characterController;
+        private EnemyStateMachine stateMachine;
         private Rigidbody rigidbodyComponent;
         private Health health;
         private ThrownEnemyDamage thrownEnemyDamage;
@@ -29,9 +28,7 @@ namespace EnemySystem
 
         private void Awake()
         {
-            enemyChase = GetComponent<EnemyChase>();
-            enemyMeleeAttack = GetComponent<EnemyMeleeAttack>();
-            characterController = GetComponent<CharacterController>();
+            stateMachine = GetComponent<EnemyStateMachine>();
             rigidbodyComponent = GetComponent<Rigidbody>();
             health = GetComponent<Health>();
             thrownEnemyDamage = GetComponent<ThrownEnemyDamage>();
@@ -53,7 +50,7 @@ namespace EnemySystem
                 recoveryCoroutine = null;
             }
 
-            DisableEnemyLogic();
+            stateMachine.ChangeState(EnemyStateId.Grabbed);
 
             if (rigidbodyComponent != null)
             {
@@ -82,6 +79,8 @@ namespace EnemySystem
 
             transform.SetParent(null);
 
+            stateMachine.ChangeState(EnemyStateId.Thrown);
+
             if (rigidbodyComponent != null)
             {
                 rigidbodyComponent.isKinematic = false;
@@ -94,9 +93,7 @@ namespace EnemySystem
             }
 
             if (thrownEnemyDamage != null)
-            {
                 thrownEnemyDamage.Activate();
-            }
 
             recoveryCoroutine = StartCoroutine(RecoverAfterThrow());
         }
@@ -122,32 +119,8 @@ namespace EnemySystem
                 rigidbodyComponent.useGravity = false;
             }
 
-            EnableEnemyLogic();
+            stateMachine.ChangeState(EnemyStateId.Chase);
             recoveryCoroutine = null;
-        }
-
-        private void DisableEnemyLogic()
-        {
-            if (enemyChase != null)
-                enemyChase.enabled = false;
-
-            if (enemyMeleeAttack != null)
-                enemyMeleeAttack.enabled = false;
-
-            if (characterController != null)
-                characterController.enabled = false;
-        }
-
-        private void EnableEnemyLogic()
-        {
-            if (characterController != null)
-                characterController.enabled = true;
-
-            if (enemyChase != null)
-                enemyChase.enabled = true;
-
-            if (enemyMeleeAttack != null)
-                enemyMeleeAttack.enabled = true;
         }
 
         private void PrepareRigidbody()

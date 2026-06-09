@@ -37,9 +37,7 @@ namespace EnemySystem
                 return;
 
             if (Time.time >= deactivateTime)
-            {
                 Deactivate();
-            }
         }
 
         public void Activate()
@@ -47,6 +45,11 @@ namespace EnemySystem
             isActive = true;
             hasHit = false;
             deactivateTime = Time.time + activeDuration;
+        }
+
+        public void Deactivate()
+        {
+            isActive = false;
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -93,11 +96,6 @@ namespace EnemySystem
             health.TakeDamage(damageToSelfOnEnemy);
 
             Deactivate();
-        }
-
-        private void Deactivate()
-        {
-            isActive = false;
         }
 
         private bool IsInLayerMask(int layer, LayerMask layerMask)

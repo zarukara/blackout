@@ -5,41 +5,40 @@ namespace EnemySystem
 {
     public class EnemyMeleeAttack : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private Transform target;
-
         [Header("Attack")]
         [SerializeField] private int damage = 10;
         [SerializeField] private float attackDistance = 1.7f;
         [SerializeField] private float attackCooldown = 1f;
 
-        private Health targetHealth;
         private float nextAttackTime;
 
-        private void Awake()
+        public float AttackDistance => attackDistance;
+
+        public bool CanAttack(Transform target)
         {
-            if (target != null)
-            {
-                targetHealth = target.GetComponent<Health>();
-            }
+            if (target == null)
+                return false;
+
+            Vector3 direction = target.position - transform.position;
+            direction.y = 0f;
+
+            return direction.magnitude <= attackDistance;
         }
 
-        private void Update()
+        public void TryAttack(Transform target)
         {
-            TryAttack();
-        }
-
-        private void TryAttack()
-        {
-            if (target == null || targetHealth == null)
+            if (target == null)
                 return;
 
             if (Time.time < nextAttackTime)
                 return;
 
-            float distance = Vector3.Distance(transform.position, target.position);
+            if (!CanAttack(target))
+                return;
 
-            if (distance > attackDistance)
+            Health targetHealth = target.GetComponent<Health>();
+
+            if (targetHealth == null)
                 return;
 
             nextAttackTime = Time.time + attackCooldown;
