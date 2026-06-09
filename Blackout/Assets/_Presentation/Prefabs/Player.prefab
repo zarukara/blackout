@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 2306453645515936310}
   - component: {fileID: 2057652619959274812}
   - component: {fileID: 3805102815924325283}
+  - component: {fileID: 9156669073668042155}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -206,7 +207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84f11183c37e8f941a723b6a6f33280d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSystem.PlayerMovement
-  inputReader: {fileID: 0}
   moveSpeed: 6
   gravity: -20
 --- !u!114 &2306453645515936310
@@ -221,8 +221,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b79cdb950ea29246b3885a715bb783a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSystem.PlayerRotation
-  inputReader: {fileID: 0}
-  mainCamera: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -239,8 +237,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c389fc1ad1245ff428ee23a87a1b9ce6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSystem.PlayerMeleeAttack
-  inputReader: {fileID: 0}
-  grabController: {fileID: 3805102815924325283}
   playerHealth: {fileID: 5844551558448622571}
   attackPoint: {fileID: 8623298250850324055}
   damage: 50
@@ -262,7 +258,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da96d13687077cf4785b6b163cd96d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSystem.PlayerGrabController
-  inputReader: {fileID: 0}
   grabPoint: {fileID: 1006573546817210656}
   holdPoint: {fileID: 4418290121746699903}
   grabRadius: 1.2
@@ -270,6 +265,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   throwForce: 36
+--- !u!114 &9156669073668042155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2121154984690737197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e72cfebca799f24c8aae0b93502087a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSystem.PlayerDashController
+  dashDistance: 4
+  dashDuration: 0.12
+  dashCooldown: 0.6
 --- !u!1 &3044629837229849191
 GameObject:
   m_ObjectHideFlags: 0

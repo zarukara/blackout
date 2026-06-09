@@ -18,6 +18,7 @@ namespace CoreSystem
         [SerializeField] private PlayerRotation playerRotation;
         [SerializeField] private PlayerGrabController playerGrabController;
         [SerializeField] private PlayerMeleeAttack playerMeleeAttack;
+        [SerializeField] private PlayerDashController playerDashController;
 
         [Header("Camera References")]
         [SerializeField] private CameraRotationController cameraRotationController;
@@ -32,6 +33,7 @@ namespace CoreSystem
             playerRotation.Initialize(inputReader, mainCamera);
             playerGrabController.Initialize(inputReader);
             playerMeleeAttack.Initialize(inputReader, playerGrabController);
+            playerDashController.Initialize(inputReader, playerGrabController, mainCamera);
 
             cameraRotationController.Initialize(inputReader);
 

@@ -43,6 +43,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "471bba9d-19e7-47c2-9741-7723a0cb5dca",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Grab",
                     "type": "Button",
                     "id": "91b5fdc9-1ade-411b-8dff-4fdf7aab75fe",
@@ -374,6 +383,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "MoveCameraRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c9dc08cb-1c09-4650-ad4e-daf213532407",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

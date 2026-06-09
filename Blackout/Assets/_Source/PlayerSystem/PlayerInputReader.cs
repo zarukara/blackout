@@ -13,6 +13,7 @@ namespace PlayerSystem
         [SerializeField] private InputActionReference grabAction;
         [SerializeField] private InputActionReference cameraLeftAction;
         [SerializeField] private InputActionReference cameraRightAction;
+        [SerializeField] private InputActionReference dashAction;
 
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
@@ -21,6 +22,7 @@ namespace PlayerSystem
         public event Action GrabPressed;
         public event Action CameraLeftPressed;
         public event Action CameraRightPressed;
+        public event Action DashPressed;
 
         private void OnEnable()
         {
@@ -30,11 +32,13 @@ namespace PlayerSystem
             grabAction.action.Enable();
             cameraLeftAction.action.Enable();
             cameraRightAction.action.Enable();
+            dashAction.action.Enable();
 
             attackAction.action.performed += OnAttackPerformed;
             grabAction.action.performed += OnGrabPerformed;
             cameraLeftAction.action.performed += OnCameraLeftPerformed;
             cameraRightAction.action.performed += OnCameraRightPerformed;
+            dashAction.action.performed += OnDashPerformed;
         }
 
         private void OnDisable()
@@ -43,6 +47,7 @@ namespace PlayerSystem
             grabAction.action.performed -= OnGrabPerformed;
             cameraLeftAction.action.performed -= OnCameraLeftPerformed;
             cameraRightAction.action.performed -= OnCameraRightPerformed;
+            dashAction.action.performed -= OnDashPerformed;
 
             moveAction.action.Disable();
             lookAction.action.Disable();
@@ -50,6 +55,7 @@ namespace PlayerSystem
             grabAction.action.Disable();
             cameraLeftAction.action.Disable();
             cameraRightAction.action.Disable();
+            dashAction.action.Disable();
         }
 
         private void Update()
@@ -76,6 +82,11 @@ namespace PlayerSystem
         private void OnCameraRightPerformed(InputAction.CallbackContext context)
         {
             CameraRightPressed?.Invoke();
+        }
+
+        private void OnDashPerformed(InputAction.CallbackContext context)
+        {
+            DashPressed?.Invoke();
         }
     }
 }

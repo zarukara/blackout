@@ -771,6 +771,7 @@ MonoBehaviour:
   grabAction: {fileID: 2701296373108206031, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   cameraLeftAction: {fileID: 5911292429860888194, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   cameraRightAction: {fileID: 6601148629490009594, guid: 289c1b55c9541489481df5cc06664110, type: 3}
+  dashAction: {fileID: -8724690021520868305, guid: 289c1b55c9541489481df5cc06664110, type: 3}
 --- !u!4 &789952521
 Transform:
   m_ObjectHideFlags: 0
@@ -1415,6 +1416,7 @@ MonoBehaviour:
   playerRotation: {fileID: 1242824116}
   playerGrabController: {fileID: 1242824122}
   playerMeleeAttack: {fileID: 1242824115}
+  playerDashController: {fileID: 593948420879275248}
   cameraRotationController: {fileID: 1816709038}
   playerHealthView: {fileID: 1374624804}
   gameOverView: {fileID: 488636031}
@@ -1953,6 +1955,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+--- !u!114 &593948420879275248 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9156669073668042155, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+  m_PrefabInstance: {fileID: 593948420879275247}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e72cfebca799f24c8aae0b93502087a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSystem.PlayerDashController
 --- !u!1001 &748579463735582343
 PrefabInstance:
   m_ObjectHideFlags: 0
