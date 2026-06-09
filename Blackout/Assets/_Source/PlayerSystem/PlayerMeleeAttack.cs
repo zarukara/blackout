@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CombatSystem;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ namespace PlayerSystem
         [SerializeField] private float attackRadius = 1.2f;
         [SerializeField] private float attackCooldown = 0.4f;
         [SerializeField] private LayerMask enemyLayer;
+
+        private readonly HashSet<Health> damagedTargets = new HashSet<Health>();
 
         private float nextAttackTime;
 
@@ -33,6 +36,7 @@ namespace PlayerSystem
                 return;
 
             nextAttackTime = Time.time + attackCooldown;
+            damagedTargets.Clear();
 
             Collider[] hits = Physics.OverlapSphere(
                 attackPoint.position,
@@ -42,10 +46,16 @@ namespace PlayerSystem
 
             foreach (Collider hit in hits)
             {
-                if (hit.TryGetComponent(out Health health))
-                {
-                    health.TakeDamage(damage);
-                }
+                Health health = hit.GetComponentInParent<Health>();
+
+                if (health == null)
+                    continue;
+
+                if (damagedTargets.Contains(health))
+                    continue;
+
+                damagedTargets.Add(health);
+                health.TakeDamage(damage);
             }
         }
 
