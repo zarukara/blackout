@@ -7,11 +7,11 @@ namespace PlayerSystem
     {
         [Header("References")]
         [SerializeField] private PlayerInputReader inputReader;
+        [SerializeField] private Transform attackPoint;
 
         [Header("Attack")]
         [SerializeField] private int damage = 50;
         [SerializeField] private float attackRadius = 1.2f;
-        [SerializeField] private float attackOffset = 1.2f;
         [SerializeField] private float attackCooldown = 0.4f;
         [SerializeField] private LayerMask enemyLayer;
 
@@ -34,10 +34,8 @@ namespace PlayerSystem
 
             nextAttackTime = Time.time + attackCooldown;
 
-            Vector3 attackCenter = transform.position + transform.forward * attackOffset;
-
             Collider[] hits = Physics.OverlapSphere(
-                attackCenter,
+                attackPoint.position,
                 attackRadius,
                 enemyLayer
             );
@@ -53,9 +51,11 @@ namespace PlayerSystem
 
         private void OnDrawGizmosSelected()
         {
+            if (attackPoint == null)
+                return;
+
             Gizmos.color = Color.red;
-            Vector3 attackCenter = transform.position + transform.forward * attackOffset;
-            Gizmos.DrawWireSphere(attackCenter, attackRadius);
+            Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
         }
     }
 }
