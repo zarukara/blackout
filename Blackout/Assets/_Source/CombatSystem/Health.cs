@@ -11,11 +11,10 @@ namespace CombatSystem
 
         public int CurrentHealth { get; private set; }
         public int MaxHealth => maxHealth;
+        public bool IsDead { get; private set; }
 
         public event Action<int, int> HealthChanged;
         public event Action Died;
-
-        private bool isDead;
 
         private void Awake()
         {
@@ -25,7 +24,7 @@ namespace CombatSystem
 
         public void TakeDamage(int damage)
         {
-            if (isDead || damage <= 0)
+            if (IsDead || damage <= 0)
                 return;
 
             CurrentHealth -= damage;
@@ -39,12 +38,23 @@ namespace CombatSystem
             }
         }
 
-        private void Die()
+        public void Heal(int amount)
         {
-            if (isDead)
+            if (IsDead || amount <= 0)
                 return;
 
-            isDead = true;
+            CurrentHealth += amount;
+            CurrentHealth = Mathf.Clamp(CurrentHealth, 0, maxHealth);
+
+            HealthChanged?.Invoke(CurrentHealth, maxHealth);
+        }
+
+        private void Die()
+        {
+            if (IsDead)
+                return;
+
+            IsDead = true;
             Died?.Invoke();
 
             if (destroyOnDeath)

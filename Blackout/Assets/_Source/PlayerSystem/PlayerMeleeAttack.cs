@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CombatSystem;
+using EnemySystem;
 using UnityEngine;
 
 namespace PlayerSystem
@@ -8,6 +9,8 @@ namespace PlayerSystem
     {
         [Header("References")]
         [SerializeField] private PlayerInputReader inputReader;
+        [SerializeField] private PlayerGrabController grabController;
+        [SerializeField] private Health playerHealth;
         [SerializeField] private Transform attackPoint;
 
         [Header("Attack")]
@@ -15,6 +18,9 @@ namespace PlayerSystem
         [SerializeField] private float attackRadius = 1.2f;
         [SerializeField] private float attackCooldown = 0.4f;
         [SerializeField] private LayerMask enemyLayer;
+
+        [Header("Grabbed Enemy Heal")]
+        [SerializeField] private int healOnGrabbedKill = 25;
 
         private readonly HashSet<Health> damagedTargets = new HashSet<Health>();
 
@@ -36,6 +42,38 @@ namespace PlayerSystem
                 return;
 
             nextAttackTime = Time.time + attackCooldown;
+
+            if (grabController != null && grabController.HasGrabbedEnemy)
+            {
+                AttackGrabbedEnemy();
+                return;
+            }
+
+            AttackEnemiesInRadius();
+        }
+
+        private void AttackGrabbedEnemy()
+        {
+            EnemyGrabHandler grabbedEnemy = grabController.GrabbedEnemy;
+
+            if (grabbedEnemy == null)
+                return;
+
+            Health enemyHealth = grabbedEnemy.GetComponent<Health>();
+
+            if (enemyHealth == null)
+                return;
+
+            enemyHealth.TakeDamage(damage);
+
+            if (enemyHealth.IsDead && playerHealth != null)
+            {
+                playerHealth.Heal(healOnGrabbedKill);
+            }
+        }
+
+        private void AttackEnemiesInRadius()
+        {
             damagedTargets.Clear();
 
             Collider[] hits = Physics.OverlapSphere(
