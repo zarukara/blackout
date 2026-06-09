@@ -14,6 +14,7 @@ namespace PlayerSystem
         [SerializeField] private InputActionReference cameraLeftAction;
         [SerializeField] private InputActionReference cameraRightAction;
         [SerializeField] private InputActionReference dashAction;
+        [SerializeField] private InputActionReference pauseAction;
 
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
@@ -23,8 +24,27 @@ namespace PlayerSystem
         public event Action CameraLeftPressed;
         public event Action CameraRightPressed;
         public event Action DashPressed;
+        public event Action PausePressed;
 
         private void OnEnable()
+        {
+            EnableActions();
+            SubscribeActions();
+        }
+
+        private void OnDisable()
+        {
+            UnsubscribeActions();
+            DisableActions();
+        }
+
+        private void Update()
+        {
+            MoveInput = moveAction.action.ReadValue<Vector2>();
+            LookInput = lookAction.action.ReadValue<Vector2>();
+        }
+
+        private void EnableActions()
         {
             moveAction.action.Enable();
             lookAction.action.Enable();
@@ -33,22 +53,11 @@ namespace PlayerSystem
             cameraLeftAction.action.Enable();
             cameraRightAction.action.Enable();
             dashAction.action.Enable();
-
-            attackAction.action.performed += OnAttackPerformed;
-            grabAction.action.performed += OnGrabPerformed;
-            cameraLeftAction.action.performed += OnCameraLeftPerformed;
-            cameraRightAction.action.performed += OnCameraRightPerformed;
-            dashAction.action.performed += OnDashPerformed;
+            pauseAction.action.Enable();
         }
 
-        private void OnDisable()
+        private void DisableActions()
         {
-            attackAction.action.performed -= OnAttackPerformed;
-            grabAction.action.performed -= OnGrabPerformed;
-            cameraLeftAction.action.performed -= OnCameraLeftPerformed;
-            cameraRightAction.action.performed -= OnCameraRightPerformed;
-            dashAction.action.performed -= OnDashPerformed;
-
             moveAction.action.Disable();
             lookAction.action.Disable();
             attackAction.action.Disable();
@@ -56,12 +65,27 @@ namespace PlayerSystem
             cameraLeftAction.action.Disable();
             cameraRightAction.action.Disable();
             dashAction.action.Disable();
+            pauseAction.action.Disable();
         }
 
-        private void Update()
+        private void SubscribeActions()
         {
-            MoveInput = moveAction.action.ReadValue<Vector2>();
-            LookInput = lookAction.action.ReadValue<Vector2>();
+            attackAction.action.performed += OnAttackPerformed;
+            grabAction.action.performed += OnGrabPerformed;
+            cameraLeftAction.action.performed += OnCameraLeftPerformed;
+            cameraRightAction.action.performed += OnCameraRightPerformed;
+            dashAction.action.performed += OnDashPerformed;
+            pauseAction.action.performed += OnPausePerformed;
+        }
+
+        private void UnsubscribeActions()
+        {
+            attackAction.action.performed -= OnAttackPerformed;
+            grabAction.action.performed -= OnGrabPerformed;
+            cameraLeftAction.action.performed -= OnCameraLeftPerformed;
+            cameraRightAction.action.performed -= OnCameraRightPerformed;
+            dashAction.action.performed -= OnDashPerformed;
+            pauseAction.action.performed -= OnPausePerformed;
         }
 
         private void OnAttackPerformed(InputAction.CallbackContext context)
@@ -87,6 +111,11 @@ namespace PlayerSystem
         private void OnDashPerformed(InputAction.CallbackContext context)
         {
             DashPressed?.Invoke();
+        }
+
+        private void OnPausePerformed(InputAction.CallbackContext context)
+        {
+            PausePressed?.Invoke();
         }
     }
 }

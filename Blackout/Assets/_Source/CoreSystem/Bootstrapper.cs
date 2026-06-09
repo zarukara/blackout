@@ -26,6 +26,7 @@ namespace CoreSystem
         [Header("UI References")]
         [SerializeField] private PlayerHealthView playerHealthView;
         [SerializeField] private GameOverView gameOverView;
+        [SerializeField] private PauseMenuView pauseMenuView;
 
         private void Awake()
         {
@@ -39,6 +40,7 @@ namespace CoreSystem
 
             playerHealthView.Initialize(playerHealth);
             gameOverView.Initialize(playerHealth);
+            pauseMenuView.Initialize(inputReader);
         }
     }
 }
