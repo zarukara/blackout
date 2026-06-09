@@ -7,6 +7,7 @@ namespace CombatSystem
     {
         [Header("Health")]
         [SerializeField] private int maxHealth = 100;
+        [SerializeField] private bool destroyOnDeath = true;
 
         public int CurrentHealth { get; private set; }
         public int MaxHealth => maxHealth;
@@ -24,10 +25,7 @@ namespace CombatSystem
 
         public void TakeDamage(int damage)
         {
-            if (isDead)
-                return;
-
-            if (damage <= 0)
+            if (isDead || damage <= 0)
                 return;
 
             CurrentHealth -= damage;
@@ -49,7 +47,10 @@ namespace CombatSystem
             isDead = true;
             Died?.Invoke();
 
-            Destroy(gameObject);
+            if (destroyOnDeath)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
