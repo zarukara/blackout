@@ -4,16 +4,24 @@ namespace PlayerSystem
 {
     public class PlayerRotation : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private PlayerInputReader inputReader;
-        [SerializeField] private Camera mainCamera;
-
         [Header("Rotation")]
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private float rotationSpeed = 20f;
 
+        private PlayerInputReader inputReader;
+        private Camera mainCamera;
+
+        public void Initialize(PlayerInputReader inputReader, Camera mainCamera)
+        {
+            this.inputReader = inputReader;
+            this.mainCamera = mainCamera;
+        }
+
         private void Update()
         {
+            if (inputReader == null || mainCamera == null)
+                return;
+
             RotateToCursor();
         }
 

@@ -8,8 +8,6 @@ namespace PlayerSystem
     public class PlayerMeleeAttack : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private PlayerInputReader inputReader;
-        [SerializeField] private PlayerGrabController grabController;
         [SerializeField] private Health playerHealth;
         [SerializeField] private Transform attackPoint;
 
@@ -24,16 +22,22 @@ namespace PlayerSystem
 
         private readonly HashSet<Health> damagedTargets = new HashSet<Health>();
 
+        private PlayerInputReader inputReader;
+        private PlayerGrabController grabController;
         private float nextAttackTime;
 
-        private void OnEnable()
+        public void Initialize(PlayerInputReader inputReader, PlayerGrabController grabController)
         {
-            inputReader.AttackPressed += Attack;
+            this.inputReader = inputReader;
+            this.grabController = grabController;
+
+            this.inputReader.AttackPressed += Attack;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            inputReader.AttackPressed -= Attack;
+            if (inputReader != null)
+                inputReader.AttackPressed -= Attack;
         }
 
         private void Attack()

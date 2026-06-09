@@ -8,24 +8,28 @@ namespace UISystem
     public class GameOverView : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private Health playerHealth;
         [SerializeField] private GameObject deathScreen;
 
+        private Health playerHealth;
         private bool isGameOver;
 
-        private void OnEnable()
+        public void Initialize(Health playerHealth)
         {
-            playerHealth.Died += ShowDeathScreen;
+            this.playerHealth = playerHealth;
+            this.playerHealth.Died += ShowDeathScreen;
+
+            if (deathScreen != null)
+            {
+                deathScreen.SetActive(false);
+            }
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            playerHealth.Died -= ShowDeathScreen;
-        }
-
-        private void Start()
-        {
-            deathScreen.SetActive(false);
+            if (playerHealth != null)
+            {
+                playerHealth.Died -= ShowDeathScreen;
+            }
         }
 
         private void Update()

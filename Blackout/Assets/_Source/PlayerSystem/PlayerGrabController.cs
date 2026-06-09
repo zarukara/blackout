@@ -6,7 +6,6 @@ namespace PlayerSystem
     public class PlayerGrabController : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private PlayerInputReader inputReader;
         [SerializeField] private Transform grabPoint;
         [SerializeField] private Transform holdPoint;
 
@@ -17,19 +16,23 @@ namespace PlayerSystem
         [Header("Throw")]
         [SerializeField] private float throwForce = 12f;
 
+        private PlayerInputReader inputReader;
         private EnemyGrabHandler grabbedEnemy;
 
         public EnemyGrabHandler GrabbedEnemy => grabbedEnemy;
         public bool HasGrabbedEnemy => grabbedEnemy != null;
 
-        private void OnEnable()
+        public void Initialize(PlayerInputReader inputReader)
         {
-            inputReader.GrabPressed += HandleGrabInput;
+            this.inputReader = inputReader;
+            this.inputReader.GrabPressed += HandleGrabInput;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            inputReader.GrabPressed -= HandleGrabInput;
+            if (inputReader != null)
+                inputReader.GrabPressed -= HandleGrabInput;
+
             UnsubscribeFromGrabbedEnemy();
         }
 
@@ -59,7 +62,7 @@ namespace PlayerSystem
             {
                 EnemyGrabHandler enemy = hit.GetComponentInParent<EnemyGrabHandler>();
 
-                if (enemy == null || enemy.IsGrabbed)
+                if (enemy == null || enemy.IsGrabbed || enemy.IsThrown)
                     continue;
 
                 float distance = Vector3.Distance(transform.position, enemy.transform.position);

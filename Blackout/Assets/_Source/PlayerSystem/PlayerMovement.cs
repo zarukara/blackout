@@ -5,15 +5,18 @@ namespace PlayerSystem
     [RequireComponent(typeof(CharacterController))]
     public class PlayerMovement : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private PlayerInputReader inputReader;
-
         [Header("Movement")]
         [SerializeField] private float moveSpeed = 6f;
         [SerializeField] private float gravity = -20f;
 
+        private PlayerInputReader inputReader;
         private CharacterController characterController;
         private Vector3 verticalVelocity;
+
+        public void Initialize(PlayerInputReader inputReader)
+        {
+            this.inputReader = inputReader;
+        }
 
         private void Awake()
         {
@@ -22,6 +25,9 @@ namespace PlayerSystem
 
         private void Update()
         {
+            if (inputReader == null)
+                return;
+
             Move();
         }
 
@@ -40,7 +46,6 @@ namespace PlayerSystem
             verticalVelocity.y += gravity * Time.deltaTime;
 
             Vector3 finalMove = moveDirection * moveSpeed + verticalVelocity;
-
             characterController.Move(finalMove * Time.deltaTime);
         }
     }

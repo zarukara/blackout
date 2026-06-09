@@ -8,37 +8,37 @@ namespace UISystem
     public class PlayerHealthView : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private Health playerHealth;
         [SerializeField] private TMP_Text healthText;
         [SerializeField] private Image healthFillImage;
 
         [Header("Animation")]
         [SerializeField] private float fillChangeSpeed = 5f;
 
+        private Health playerHealth;
         private float targetFillAmount = 1f;
 
-        private void OnEnable()
+        public void Initialize(Health playerHealth)
         {
-            if (playerHealth != null)
+            this.playerHealth = playerHealth;
+
+            this.playerHealth.HealthChanged += UpdateHealthView;
+
+            UpdateHealthView(
+                this.playerHealth.CurrentHealth,
+                this.playerHealth.MaxHealth
+            );
+
+            if (healthFillImage != null)
             {
-                playerHealth.HealthChanged += UpdateHealthView;
+                healthFillImage.fillAmount = targetFillAmount;
             }
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             if (playerHealth != null)
             {
                 playerHealth.HealthChanged -= UpdateHealthView;
-            }
-        }
-
-        private void Start()
-        {
-            if (playerHealth != null)
-            {
-                UpdateHealthView(playerHealth.CurrentHealth, playerHealth.MaxHealth);
-                healthFillImage.fillAmount = targetFillAmount;
             }
         }
 

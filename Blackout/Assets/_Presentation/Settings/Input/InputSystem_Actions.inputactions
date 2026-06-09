@@ -50,6 +50,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Interaction",
+                    "type": "Button",
+                    "id": "c8606fcc-784f-4e91-9563-2f81301fd234",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MoveCameraLeft",
+                    "type": "Button",
+                    "id": "55f453d9-585d-4d9b-93c3-e07551a391eb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MoveCameraRight",
+                    "type": "Button",
+                    "id": "6fa7ca48-f7ab-454c-8980-36655988385d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -308,23 +335,45 @@
                 },
                 {
                     "name": "",
-                    "id": "018f12df-c0f2-4de1-bc6b-88b490686e71",
-                    "path": "<Keyboard>/e",
+                    "id": "1d388a0c-2805-48d8-86ba-33bb571b51d4",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Grab",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "1d388a0c-2805-48d8-86ba-33bb571b51d4",
-                    "path": "<Mouse>/rightButton",
+                    "id": "2dad58c4-42a0-410f-b2e2-1bc4e2f497b6",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Grab",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "86c438a9-f5fb-4895-b82a-e585f291a724",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "MoveCameraLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "38b0679e-7e23-49c2-9cb8-f8501d4b12f7",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "MoveCameraRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
