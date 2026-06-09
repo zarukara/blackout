@@ -769,6 +769,8 @@ MonoBehaviour:
   lookAction: {fileID: -5630151704836100654, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   attackAction: {fileID: 1120369429361536294, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   grabAction: {fileID: 2701296373108206031, guid: 289c1b55c9541489481df5cc06664110, type: 3}
+  cameraLeftAction: {fileID: 5911292429860888194, guid: 289c1b55c9541489481df5cc06664110, type: 3}
+  cameraRightAction: {fileID: 6601148629490009594, guid: 289c1b55c9541489481df5cc06664110, type: 3}
 --- !u!4 &789952521
 Transform:
   m_ObjectHideFlags: 0
@@ -1064,8 +1066,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.47185796, y: 0, z: 0, w: 0.8816746}
-  m_LocalPosition: {x: 0, y: 13, z: -8}
+  m_LocalRotation: {x: 0.47185805, y: -0.00000021020759, z: 0.00000011249973, w: 0.8816746}
+  m_LocalPosition: {x: 0.000003814695, y: 13, z: -7.999995}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1413,6 +1415,7 @@ MonoBehaviour:
   playerRotation: {fileID: 1242824116}
   playerGrabController: {fileID: 1242824122}
   playerMeleeAttack: {fileID: 1242824115}
+  cameraRotationController: {fileID: 1816709038}
   playerHealthView: {fileID: 1374624804}
   gameOverView: {fileID: 488636031}
 --- !u!4 &1028542194
@@ -1424,7 +1427,7 @@ Transform:
   m_GameObject: {fileID: 1028542192}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.46011, y: 0, z: 11.30045}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1756,6 +1759,7 @@ GameObject:
   - component: {fileID: 1816709035}
   - component: {fileID: 1816709034}
   - component: {fileID: 1816709037}
+  - component: {fileID: 1816709038}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: Untagged
@@ -1781,7 +1785,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 12, z: -8}
+  FollowOffset: {x: 0.000003814695, y: 12, z: -7.999995}
 --- !u!114 &1816709035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1833,8 +1837,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1816709032}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.47185796, y: 0, z: 0, w: 0.8816746}
-  m_LocalPosition: {x: 0, y: 13, z: -8}
+  m_LocalRotation: {x: 0.47185805, y: -0.00000021020759, z: 0.00000011249973, w: 0.8816746}
+  m_LocalPosition: {x: 0.000003814695, y: 13, z: -7.999995}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1853,6 +1857,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineHardLookAt
   LookAtOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &1816709038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1816709032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 078ffeb58b319304d9ec008b82d2b242, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraSystem.CameraRotationController
+  cinemachineFollow: {fileID: 1816709034}
+  rotationStep: 90
+  rotationSpeed: 5
 --- !u!1001 &593948420879275247
 PrefabInstance:
   m_ObjectHideFlags: 0

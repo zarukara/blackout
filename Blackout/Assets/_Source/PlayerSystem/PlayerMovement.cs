@@ -10,12 +10,14 @@ namespace PlayerSystem
         [SerializeField] private float gravity = -20f;
 
         private PlayerInputReader inputReader;
+        private Camera mainCamera;
         private CharacterController characterController;
         private Vector3 verticalVelocity;
 
-        public void Initialize(PlayerInputReader inputReader)
+        public void Initialize(PlayerInputReader inputReader, Camera mainCamera)
         {
             this.inputReader = inputReader;
+            this.mainCamera = mainCamera;
         }
 
         private void Awake()
@@ -25,7 +27,7 @@ namespace PlayerSystem
 
         private void Update()
         {
-            if (inputReader == null)
+            if (inputReader == null || mainCamera == null)
                 return;
 
             Move();
@@ -35,7 +37,16 @@ namespace PlayerSystem
         {
             Vector2 input = inputReader.MoveInput;
 
-            Vector3 moveDirection = new Vector3(input.x, 0f, input.y);
+            Vector3 cameraForward = mainCamera.transform.forward;
+            Vector3 cameraRight = mainCamera.transform.right;
+
+            cameraForward.y = 0f;
+            cameraRight.y = 0f;
+
+            cameraForward.Normalize();
+            cameraRight.Normalize();
+
+            Vector3 moveDirection = cameraRight * input.x + cameraForward * input.y;
             moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
 
             if (characterController.isGrounded && verticalVelocity.y < 0f)

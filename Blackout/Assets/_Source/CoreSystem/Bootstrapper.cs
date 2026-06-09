@@ -1,3 +1,4 @@
+using CameraSystem;
 using CombatSystem;
 using PlayerSystem;
 using UISystem;
@@ -18,16 +19,21 @@ namespace CoreSystem
         [SerializeField] private PlayerGrabController playerGrabController;
         [SerializeField] private PlayerMeleeAttack playerMeleeAttack;
 
+        [Header("Camera References")]
+        [SerializeField] private CameraRotationController cameraRotationController;
+
         [Header("UI References")]
         [SerializeField] private PlayerHealthView playerHealthView;
         [SerializeField] private GameOverView gameOverView;
 
         private void Awake()
         {
-            playerMovement.Initialize(inputReader);
+            playerMovement.Initialize(inputReader, mainCamera);
             playerRotation.Initialize(inputReader, mainCamera);
             playerGrabController.Initialize(inputReader);
             playerMeleeAttack.Initialize(inputReader, playerGrabController);
+
+            cameraRotationController.Initialize(inputReader);
 
             playerHealthView.Initialize(playerHealth);
             gameOverView.Initialize(playerHealth);

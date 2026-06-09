@@ -11,12 +11,16 @@ namespace PlayerSystem
         [SerializeField] private InputActionReference lookAction;
         [SerializeField] private InputActionReference attackAction;
         [SerializeField] private InputActionReference grabAction;
+        [SerializeField] private InputActionReference cameraLeftAction;
+        [SerializeField] private InputActionReference cameraRightAction;
 
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
 
         public event Action AttackPressed;
         public event Action GrabPressed;
+        public event Action CameraLeftPressed;
+        public event Action CameraRightPressed;
 
         private void OnEnable()
         {
@@ -24,20 +28,28 @@ namespace PlayerSystem
             lookAction.action.Enable();
             attackAction.action.Enable();
             grabAction.action.Enable();
+            cameraLeftAction.action.Enable();
+            cameraRightAction.action.Enable();
 
             attackAction.action.performed += OnAttackPerformed;
             grabAction.action.performed += OnGrabPerformed;
+            cameraLeftAction.action.performed += OnCameraLeftPerformed;
+            cameraRightAction.action.performed += OnCameraRightPerformed;
         }
 
         private void OnDisable()
         {
             attackAction.action.performed -= OnAttackPerformed;
             grabAction.action.performed -= OnGrabPerformed;
+            cameraLeftAction.action.performed -= OnCameraLeftPerformed;
+            cameraRightAction.action.performed -= OnCameraRightPerformed;
 
             moveAction.action.Disable();
             lookAction.action.Disable();
             attackAction.action.Disable();
             grabAction.action.Disable();
+            cameraLeftAction.action.Disable();
+            cameraRightAction.action.Disable();
         }
 
         private void Update()
@@ -54,6 +66,16 @@ namespace PlayerSystem
         private void OnGrabPerformed(InputAction.CallbackContext context)
         {
             GrabPressed?.Invoke();
+        }
+
+        private void OnCameraLeftPerformed(InputAction.CallbackContext context)
+        {
+            CameraLeftPressed?.Invoke();
+        }
+
+        private void OnCameraRightPerformed(InputAction.CallbackContext context)
+        {
+            CameraRightPressed?.Invoke();
         }
     }
 }
