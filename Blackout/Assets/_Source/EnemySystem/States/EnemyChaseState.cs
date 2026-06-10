@@ -27,6 +27,12 @@ namespace EnemySystem
                 return;
             }
 
+            if (context.RangedAttack != null && context.RangedAttack.CanAttack(context.Target))
+            {
+                context.StateMachine.ChangeState(EnemyStateId.RangedAttack);
+                return;
+            }
+
             context.Movement.MoveToTarget(context.Target);
         }
 

@@ -15,6 +15,7 @@ namespace EnemySystem
         public EnemyStateMachine StateMachine { get; private set; }
         public EnemyMovement Movement { get; private set; }
         public EnemyMeleeAttack MeleeAttack { get; private set; }
+        public EnemyRangedAttack RangedAttack { get; private set; }
         public EnemyGrabHandler GrabHandler { get; private set; }
         public ThrownEnemyDamage ThrownEnemyDamage { get; private set; }
 
@@ -30,6 +31,7 @@ namespace EnemySystem
             StateMachine = GetComponent<EnemyStateMachine>();
             Movement = GetComponent<EnemyMovement>();
             MeleeAttack = GetComponent<EnemyMeleeAttack>();
+            RangedAttack = GetComponent<EnemyRangedAttack>();
             GrabHandler = GetComponent<EnemyGrabHandler>();
             ThrownEnemyDamage = GetComponent<ThrownEnemyDamage>();
         }
