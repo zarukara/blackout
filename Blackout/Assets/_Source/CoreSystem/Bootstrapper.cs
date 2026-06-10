@@ -3,6 +3,7 @@ using CombatSystem;
 using PlayerSystem;
 using UISystem;
 using UnityEngine;
+using WeaponSystem;
 
 namespace CoreSystem
 {
@@ -19,6 +20,8 @@ namespace CoreSystem
         [SerializeField] private PlayerGrabController playerGrabController;
         [SerializeField] private PlayerMeleeAttack playerMeleeAttack;
         [SerializeField] private PlayerDashController playerDashController;
+        [SerializeField] private PlayerWeaponCollector playerWeaponCollector;
+        [SerializeField] private PlayerWeaponController playerWeaponController;
 
         [Header("Camera References")]
         [SerializeField] private CameraRotationController cameraRotationController;
@@ -33,8 +36,10 @@ namespace CoreSystem
             playerMovement.Initialize(inputReader, mainCamera);
             playerRotation.Initialize(inputReader, mainCamera);
             playerGrabController.Initialize(inputReader);
-            playerMeleeAttack.Initialize(inputReader, playerGrabController);
+            playerMeleeAttack.Initialize(playerGrabController);
             playerDashController.Initialize(inputReader, playerGrabController, mainCamera);
+
+            playerWeaponController.Initialize(inputReader, playerWeaponCollector);
 
             cameraRotationController.Initialize(inputReader);
 

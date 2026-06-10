@@ -7,84 +7,75 @@ namespace PlayerSystem
 {
     public class PlayerMeleeAttack : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private Health playerHealth;
-        [SerializeField] private Transform attackPoint;
-
         [Header("Attack")]
         [SerializeField] private int damage = 50;
-        [SerializeField] private float attackRadius = 1.2f;
-        [SerializeField] private float attackCooldown = 0.4f;
+        [SerializeField] private float attackRadius = 1.5f;
+        [SerializeField] private float attackCooldown = 0.35f;
+        [SerializeField] private Transform attackPoint;
         [SerializeField] private LayerMask enemyLayer;
 
-        [Header("Grabbed Enemy Heal")]
-        [SerializeField] private int healOnGrabbedKill = 25;
+        [Header("Grabbed Enemy")]
+        [SerializeField] private int grabbedEnemyHealAmount = 15;
 
-        private readonly HashSet<Health> damagedTargets = new HashSet<Health>();
+        private readonly HashSet<Health> damagedTargets = new();
 
-        private PlayerInputReader inputReader;
-        private PlayerGrabController grabController;
+        private PlayerGrabController playerGrabController;
         private float nextAttackTime;
 
-        public void Initialize(PlayerInputReader inputReader, PlayerGrabController grabController)
+        public void Initialize(PlayerGrabController playerGrabController)
         {
-            this.inputReader = inputReader;
-            this.grabController = grabController;
-
-            this.inputReader.AttackPressed += Attack;
+            this.playerGrabController = playerGrabController;
         }
 
-        private void OnDestroy()
-        {
-            if (inputReader != null)
-                inputReader.AttackPressed -= Attack;
-        }
-
-        private void Attack()
+        public void PerformAttack()
         {
             if (Time.time < nextAttackTime)
                 return;
 
             nextAttackTime = Time.time + attackCooldown;
 
-            if (grabController != null && grabController.HasGrabbedEnemy)
-            {
-                AttackGrabbedEnemy();
+            if (TryAttackGrabbedEnemy())
                 return;
-            }
 
             AttackEnemiesInRadius();
         }
 
-        private void AttackGrabbedEnemy()
+        private bool TryAttackGrabbedEnemy()
         {
-            EnemyGrabHandler grabbedEnemy = grabController.GrabbedEnemy;
+            if (playerGrabController == null)
+                return false;
+
+            EnemyGrabHandler grabbedEnemy = playerGrabController.GrabbedEnemy;
 
             if (grabbedEnemy == null)
-                return;
+                return false;
 
-            Health enemyHealth = grabbedEnemy.GetComponent<Health>();
+            Health grabbedHealth = grabbedEnemy.Health;
 
-            if (enemyHealth == null)
-                return;
+            if (grabbedHealth == null || grabbedHealth.IsDead)
+                return true;
 
-            enemyHealth.TakeDamage(damage);
+            grabbedHealth.TakeDamage(damage);
 
-            if (enemyHealth.IsDead && playerHealth != null)
-            {
-                playerHealth.Heal(healOnGrabbedKill);
-            }
+            if (grabbedHealth.IsDead)
+                HealPlayerAfterExecution();
+
+            return true;
         }
 
         private void AttackEnemiesInRadius()
         {
-            damagedTargets.Clear();
+            Vector3 center = attackPoint != null
+                ? attackPoint.position
+                : transform.position;
 
             Collider[] hits = Physics.OverlapSphere(
-                attackPoint.position,
+                center,
                 attackRadius,
                 enemyLayer
             );
+
+            damagedTargets.Clear();
 
             foreach (Collider hit in hits)
             {
@@ -93,21 +84,34 @@ namespace PlayerSystem
                 if (health == null)
                     continue;
 
-                if (damagedTargets.Contains(health))
+                if (health.IsDead)
                     continue;
 
-                damagedTargets.Add(health);
+                if (!damagedTargets.Add(health))
+                    continue;
+
                 health.TakeDamage(damage);
             }
         }
 
-        private void OnDrawGizmosSelected()
+        private void HealPlayerAfterExecution()
         {
-            if (attackPoint == null)
+            Health playerHealth = GetComponent<Health>();
+
+            if (playerHealth == null)
                 return;
 
+            playerHealth.Heal(grabbedEnemyHealAmount);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Vector3 center = attackPoint != null
+                ? attackPoint.position
+                : transform.position;
+
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
+            Gizmos.DrawWireSphere(center, attackRadius);
         }
     }
 }
