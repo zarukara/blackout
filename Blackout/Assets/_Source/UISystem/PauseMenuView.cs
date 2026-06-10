@@ -39,6 +39,9 @@ namespace UISystem
             if (pauseScreen != null)
                 pauseScreen.SetActive(false);
 
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             ClearSelectedButton();
         }
 
@@ -71,8 +74,14 @@ namespace UISystem
                 return;
 
             isPaused = true;
-            pauseScreen.SetActive(true);
+
+            if (pauseScreen != null)
+                pauseScreen.SetActive(true);
+
             Time.timeScale = 0f;
+
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
 
             ClearSelectedButton();
         }
@@ -80,8 +89,15 @@ namespace UISystem
         public void Resume()
         {
             isPaused = false;
-            pauseScreen.SetActive(false);
+
+            if (pauseScreen != null)
+                pauseScreen.SetActive(false);
+
             Time.timeScale = 1f;
+
+            // В top-down shooter курсор нужен для прицеливания.
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
 
             ClearSelectedButton();
         }

@@ -30,6 +30,7 @@ namespace CoreSystem
         [SerializeField] private PlayerHealthView playerHealthView;
         [SerializeField] private GameOverView gameOverView;
         [SerializeField] private PauseMenuView pauseMenuView;
+        [SerializeField] private WeaponWheelView weaponWheelView;
 
         private void Awake()
         {
@@ -46,6 +47,7 @@ namespace CoreSystem
             playerHealthView.Initialize(playerHealth);
             gameOverView.Initialize(playerHealth);
             pauseMenuView.Initialize(inputReader, playerHealth);
+            weaponWheelView.Initialize(inputReader, playerWeaponCollector, playerWeaponController);
         }
     }
 }

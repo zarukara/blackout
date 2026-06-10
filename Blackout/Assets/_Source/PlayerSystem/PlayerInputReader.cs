@@ -15,6 +15,7 @@ namespace PlayerSystem
         [SerializeField] private InputActionReference cameraRightAction;
         [SerializeField] private InputActionReference dashAction;
         [SerializeField] private InputActionReference pauseAction;
+        [SerializeField] private InputActionReference weaponWheelAction;
 
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
@@ -25,6 +26,9 @@ namespace PlayerSystem
         public event Action CameraRightPressed;
         public event Action DashPressed;
         public event Action PausePressed;
+
+        public event Action WeaponWheelStarted;
+        public event Action WeaponWheelCanceled;
 
         private void OnEnable()
         {
@@ -54,6 +58,7 @@ namespace PlayerSystem
             cameraRightAction.action.Enable();
             dashAction.action.Enable();
             pauseAction.action.Enable();
+            weaponWheelAction.action.Enable();
         }
 
         private void DisableActions()
@@ -66,6 +71,7 @@ namespace PlayerSystem
             cameraRightAction.action.Disable();
             dashAction.action.Disable();
             pauseAction.action.Disable();
+            weaponWheelAction.action.Disable();
         }
 
         private void SubscribeActions()
@@ -76,6 +82,9 @@ namespace PlayerSystem
             cameraRightAction.action.performed += OnCameraRightPerformed;
             dashAction.action.performed += OnDashPerformed;
             pauseAction.action.performed += OnPausePerformed;
+
+            weaponWheelAction.action.started += OnWeaponWheelStarted;
+            weaponWheelAction.action.canceled += OnWeaponWheelCanceled;
         }
 
         private void UnsubscribeActions()
@@ -86,36 +95,19 @@ namespace PlayerSystem
             cameraRightAction.action.performed -= OnCameraRightPerformed;
             dashAction.action.performed -= OnDashPerformed;
             pauseAction.action.performed -= OnPausePerformed;
+
+            weaponWheelAction.action.started -= OnWeaponWheelStarted;
+            weaponWheelAction.action.canceled -= OnWeaponWheelCanceled;
         }
 
-        private void OnAttackPerformed(InputAction.CallbackContext context)
-        {
-            AttackPressed?.Invoke();
-        }
+        private void OnAttackPerformed(InputAction.CallbackContext context) => AttackPressed?.Invoke();
+        private void OnGrabPerformed(InputAction.CallbackContext context) => GrabPressed?.Invoke();
+        private void OnCameraLeftPerformed(InputAction.CallbackContext context) => CameraLeftPressed?.Invoke();
+        private void OnCameraRightPerformed(InputAction.CallbackContext context) => CameraRightPressed?.Invoke();
+        private void OnDashPerformed(InputAction.CallbackContext context) => DashPressed?.Invoke();
+        private void OnPausePerformed(InputAction.CallbackContext context) => PausePressed?.Invoke();
 
-        private void OnGrabPerformed(InputAction.CallbackContext context)
-        {
-            GrabPressed?.Invoke();
-        }
-
-        private void OnCameraLeftPerformed(InputAction.CallbackContext context)
-        {
-            CameraLeftPressed?.Invoke();
-        }
-
-        private void OnCameraRightPerformed(InputAction.CallbackContext context)
-        {
-            CameraRightPressed?.Invoke();
-        }
-
-        private void OnDashPerformed(InputAction.CallbackContext context)
-        {
-            DashPressed?.Invoke();
-        }
-
-        private void OnPausePerformed(InputAction.CallbackContext context)
-        {
-            PausePressed?.Invoke();
-        }
+        private void OnWeaponWheelStarted(InputAction.CallbackContext context) => WeaponWheelStarted?.Invoke();
+        private void OnWeaponWheelCanceled(InputAction.CallbackContext context) => WeaponWheelCanceled?.Invoke();
     }
 }
