@@ -1,7 +1,8 @@
+using CombatSystem;
 using PlayerSystem;
+using SceneSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UISystem
@@ -19,11 +20,14 @@ namespace UISystem
         [SerializeField] private Button exitButton;
 
         private PlayerInputReader inputReader;
+        private Health playerHealth;
         private bool isPaused;
 
-        public void Initialize(PlayerInputReader inputReader)
+        public void Initialize(PlayerInputReader inputReader, Health playerHealth)
         {
             this.inputReader = inputReader;
+            this.playerHealth = playerHealth;
+
             this.inputReader.PausePressed += TogglePause;
 
             resumeButton.onClick.AddListener(Resume);
@@ -52,6 +56,9 @@ namespace UISystem
 
         private void TogglePause()
         {
+            if (playerHealth != null && playerHealth.IsDead)
+                return;
+
             if (isPaused)
                 Resume();
             else
@@ -60,6 +67,9 @@ namespace UISystem
 
         private void Pause()
         {
+            if (playerHealth != null && playerHealth.IsDead)
+                return;
+
             isPaused = true;
             pauseScreen.SetActive(true);
             Time.timeScale = 0f;
@@ -78,10 +88,8 @@ namespace UISystem
 
         private void RestartScene()
         {
-            Time.timeScale = 1f;
             ClearSelectedButton();
-
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            SceneLoader.ReloadCurrentScene();
         }
 
         private void OpenOptions()
@@ -98,8 +106,8 @@ namespace UISystem
 
         private void ExitToMainMenu()
         {
-            Debug.Log("Main menu is not implemented yet.");
             ClearSelectedButton();
+            SceneLoader.LoadMainMenu();
         }
 
         private void ClearSelectedButton()

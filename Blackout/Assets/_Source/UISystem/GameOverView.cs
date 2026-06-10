@@ -1,7 +1,8 @@
 using CombatSystem;
+using SceneSystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 namespace UISystem
 {
@@ -19,17 +20,15 @@ namespace UISystem
             this.playerHealth.Died += ShowDeathScreen;
 
             if (deathScreen != null)
-            {
                 deathScreen.SetActive(false);
-            }
+
+            ClearSelectedButton();
         }
 
         private void OnDestroy()
         {
             if (playerHealth != null)
-            {
                 playerHealth.Died -= ShowDeathScreen;
-            }
         }
 
         private void Update()
@@ -37,23 +36,45 @@ namespace UISystem
             if (!isGameOver)
                 return;
 
+            if (Keyboard.current == null)
+                return;
+
             if (Keyboard.current.rKey.wasPressedThisFrame)
-            {
                 RestartScene();
-            }
+
+            if (Keyboard.current.escapeKey.wasPressedThisFrame)
+                ExitToMainMenu();
         }
 
         private void ShowDeathScreen()
         {
             isGameOver = true;
-            deathScreen.SetActive(true);
+
+            if (deathScreen != null)
+                deathScreen.SetActive(true);
+
             Time.timeScale = 0f;
+            ClearSelectedButton();
         }
 
         private void RestartScene()
         {
-            Time.timeScale = 1f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            ClearSelectedButton();
+            SceneLoader.ReloadCurrentScene();
+        }
+
+        private void ExitToMainMenu()
+        {
+            ClearSelectedButton();
+            SceneLoader.LoadMainMenu();
+        }
+
+        private void ClearSelectedButton()
+        {
+            if (EventSystem.current == null)
+                return;
+
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 }

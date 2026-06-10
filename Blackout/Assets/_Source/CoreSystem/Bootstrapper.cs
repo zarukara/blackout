@@ -40,7 +40,7 @@ namespace CoreSystem
 
             playerHealthView.Initialize(playerHealth);
             gameOverView.Initialize(playerHealth);
-            pauseMenuView.Initialize(inputReader);
+            pauseMenuView.Initialize(inputReader, playerHealth);
         }
     }
 }
