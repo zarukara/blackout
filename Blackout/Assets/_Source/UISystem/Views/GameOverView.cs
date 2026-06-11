@@ -8,21 +8,15 @@ namespace UISystem
 {
     public class GameOverView : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private GameObject deathScreen;
-
         private Health playerHealth;
-        private bool isGameOver;
+        private UiStateController uiStateController;
 
-        public void Initialize(Health playerHealth)
+        public void Initialize(Health playerHealth, UiStateController uiStateController)
         {
             this.playerHealth = playerHealth;
+            this.uiStateController = uiStateController;
+
             this.playerHealth.Died += ShowDeathScreen;
-
-            if (deathScreen != null)
-                deathScreen.SetActive(false);
-
-            ClearSelectedButton();
         }
 
         private void OnDestroy()
@@ -33,7 +27,10 @@ namespace UISystem
 
         private void Update()
         {
-            if (!isGameOver)
+            if (uiStateController == null)
+                return;
+
+            if (!uiStateController.IsState(GameUiState.Death))
                 return;
 
             if (Keyboard.current == null)
@@ -48,12 +45,7 @@ namespace UISystem
 
         private void ShowDeathScreen()
         {
-            isGameOver = true;
-
-            if (deathScreen != null)
-                deathScreen.SetActive(true);
-
-            Time.timeScale = 0f;
+            uiStateController.OpenDeath();
             ClearSelectedButton();
         }
 

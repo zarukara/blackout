@@ -44,16 +44,17 @@ GameObject:
   - component: {fileID: 7559800512674573541}
   - component: {fileID: 2804988761112286706}
   - component: {fileID: 1708210638949249297}
+  - component: {fileID: 3941102781235748647}
   - component: {fileID: 5844551558448622571}
   - component: {fileID: 5008327728854450543}
   - component: {fileID: 6551640511258540254}
   - component: {fileID: 3131449267787256425}
   - component: {fileID: 3805102815924325283}
-  - component: {fileID: 2057652619959274812}
   - component: {fileID: 6678450646217339160}
   - component: {fileID: 9156669073668042155}
   - component: {fileID: 2306453645515936310}
   - component: {fileID: 5055882405016276517}
+  - component: {fileID: 9202545738165523042}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -79,6 +80,8 @@ Transform:
   - {fileID: 8623298250850324055}
   - {fileID: 4418290121746699903}
   - {fileID: 1006573546817210656}
+  - {fileID: 4414566314231497316}
+  - {fileID: 1946417032958148956}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1530731159590682211
@@ -186,6 +189,26 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3941102781235748647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2121154984690737197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 812003a0b896a7c4c9d041f1cfb68ec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSystem.PlayerFacade
+  health: {fileID: 5844551558448622571}
+  movement: {fileID: 6678450646217339160}
+  rotation: {fileID: 2306453645515936310}
+  grabController: {fileID: 3805102815924325283}
+  dashController: {fileID: 9156669073668042155}
+  targetingController: {fileID: 9202545738165523042}
+  weaponCollector: {fileID: 5055882405016276517}
+  weaponController: {fileID: 5008327728854450543}
 --- !u!114 &5844551558448622571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,7 +252,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSystem.ClawsWeapon
   weaponType: 0
-  playerMeleeAttack: {fileID: 2057652619959274812}
+  attackPoint: {fileID: 8623298250850324055}
+  playerGrabController: {fileID: 3805102815924325283}
+  playerHealth: {fileID: 5844551558448622571}
+  damage: 50
+  attackRadius: 1.5
+  attackCooldown: 0.35
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  grabbedEnemyHealAmount: 15
 --- !u!114 &3131449267787256425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,10 +276,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSystem.PistolWeapon
   weaponType: 10
   projectilePool: {fileID: 0}
-  firePoint: {fileID: 0}
-  damage: 25
-  projectileSpeed: 25
-  attackCooldown: 0.25
+  firePoint: {fileID: 4414566314231497316}
+  targetingController: {fileID: 9202545738165523042}
+  damage: 50
+  projectileSpeed: 50
+  attackCooldown: 0
   spreadAngle: 1.5
 --- !u!114 &3805102815924325283
 MonoBehaviour:
@@ -268,26 +301,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   throwForce: 36
---- !u!114 &2057652619959274812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2121154984690737197}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c389fc1ad1245ff428ee23a87a1b9ce6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerSystem.PlayerMeleeAttack
-  damage: 1000
-  attackRadius: 1.2
-  attackCooldown: 0.4
-  attackPoint: {fileID: 8623298250850324055}
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  grabbedEnemyHealAmount: 15
 --- !u!114 &6678450646217339160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,6 +358,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecf421d39c353b04f9b9a4162b0fbc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSystem.PlayerWeaponCollector
+--- !u!114 &9202545738165523042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2121154984690737197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ee843221739e0344b71fce674fd8e91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSystem.PlayerTargetingController
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  raycastDistance: 1000
+  aimPlaneHeight: 0
+  drawDebug: 1
+--- !u!1 &2141609992228091588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4414566314231497316}
+  m_Layer: 3
+  m_Name: ShootPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4414566314231497316
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141609992228091588}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.424, y: 0.205, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1822547680172940319}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3044629837229849191
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,6 +434,37 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1822547680172940319}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4393832322410286842
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1946417032958148956}
+  m_Layer: 0
+  m_Name: HoldWeapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1946417032958148956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4393832322410286842}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071057, z: -0, w: 0.7071079}
+  m_LocalPosition: {x: 0.424, y: 0.059929013, z: 0.99}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1822547680172940319}

@@ -1,4 +1,3 @@
-using CombatSystem;
 using PlayerSystem;
 using SceneSystem;
 using UnityEngine;
@@ -9,9 +8,6 @@ namespace UISystem
 {
     public class PauseMenuView : MonoBehaviour
     {
-        [Header("Screens")]
-        [SerializeField] private GameObject pauseScreen;
-
         [Header("Buttons")]
         [SerializeField] private Button resumeButton;
         [SerializeField] private Button restartButton;
@@ -20,13 +16,12 @@ namespace UISystem
         [SerializeField] private Button exitButton;
 
         private PlayerInputReader inputReader;
-        private Health playerHealth;
-        private bool isPaused;
+        private UiStateController uiStateController;
 
-        public void Initialize(PlayerInputReader inputReader, Health playerHealth)
+        public void Initialize(PlayerInputReader inputReader, UiStateController uiStateController)
         {
             this.inputReader = inputReader;
-            this.playerHealth = playerHealth;
+            this.uiStateController = uiStateController;
 
             this.inputReader.PausePressed += TogglePause;
 
@@ -35,12 +30,6 @@ namespace UISystem
             optionsButton.onClick.AddListener(OpenOptions);
             controlsButton.onClick.AddListener(OpenControls);
             exitButton.onClick.AddListener(ExitToMainMenu);
-
-            if (pauseScreen != null)
-                pauseScreen.SetActive(false);
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
 
             ClearSelectedButton();
         }
@@ -59,46 +48,13 @@ namespace UISystem
 
         private void TogglePause()
         {
-            if (playerHealth != null && playerHealth.IsDead)
-                return;
-
-            if (isPaused)
-                Resume();
-            else
-                Pause();
-        }
-
-        private void Pause()
-        {
-            if (playerHealth != null && playerHealth.IsDead)
-                return;
-
-            isPaused = true;
-
-            if (pauseScreen != null)
-                pauseScreen.SetActive(true);
-
-            Time.timeScale = 0f;
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-
+            uiStateController.TogglePause();
             ClearSelectedButton();
         }
 
-        public void Resume()
+        private void Resume()
         {
-            isPaused = false;
-
-            if (pauseScreen != null)
-                pauseScreen.SetActive(false);
-
-            Time.timeScale = 1f;
-
-            // В top-down shooter курсор нужен для прицеливания.
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-
+            uiStateController.ClosePause();
             ClearSelectedButton();
         }
 

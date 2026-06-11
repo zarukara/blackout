@@ -6,45 +6,35 @@ namespace UISystem
 {
     public class WeaponWheelView : MonoBehaviour
     {
-        [Header("Root")]
-        [SerializeField] private GameObject wheelRoot;
-
         [Header("Slots")]
         [SerializeField] private WeaponWheelSlotView[] slots;
-
-        [Header("Time")]
-        [SerializeField] private float openedTimeScale = 0.15f;
 
         private PlayerInputReader inputReader;
         private PlayerWeaponCollector weaponCollector;
         private PlayerWeaponController weaponController;
+        private UiStateController uiStateController;
 
         private WeaponWheelSlotView hoveredSlot;
         private bool isOpened;
 
-        private float previousTimeScale;
-        private bool previousCursorVisible;
-        private CursorLockMode previousCursorLockState;
-
         public void Initialize(
             PlayerInputReader inputReader,
             PlayerWeaponCollector weaponCollector,
-            PlayerWeaponController weaponController
+            PlayerWeaponController weaponController,
+            UiStateController uiStateController
         )
         {
             this.inputReader = inputReader;
             this.weaponCollector = weaponCollector;
             this.weaponController = weaponController;
+            this.uiStateController = uiStateController;
 
             this.inputReader.WeaponWheelStarted += Open;
             this.inputReader.WeaponWheelCanceled += CloseAndSelect;
+            this.uiStateController.StateChanged += OnUiStateChanged;
 
             SubscribeSlots();
-
             RefreshSlots();
-
-            if (wheelRoot != null)
-                wheelRoot.SetActive(false);
         }
 
         private void OnDestroy()
@@ -55,6 +45,9 @@ namespace UISystem
                 inputReader.WeaponWheelCanceled -= CloseAndSelect;
             }
 
+            if (uiStateController != null)
+                uiStateController.StateChanged -= OnUiStateChanged;
+
             UnsubscribeSlots();
         }
 
@@ -63,31 +56,17 @@ namespace UISystem
             if (isOpened)
                 return;
 
-            if (Time.timeScale <= 0.001f)
+            hoveredSlot = null;
+
+            RefreshSlots();
+
+            if (!uiStateController.TryOpenWeaponWheel())
                 return;
 
             isOpened = true;
-            hoveredSlot = null;
 
-            previousTimeScale = Time.timeScale;
-            previousCursorVisible = Cursor.visible;
-            previousCursorLockState = Cursor.lockState;
-
-            // ВАЖНО: сначала обновляем слоты, пока колесо ещё скрыто.
-            RefreshSlots();
-
-            if (wheelRoot != null)
-                wheelRoot.SetActive(true);
-
-            // Повторно применяем состояние уже после активации,
-            // чтобы Button/Overlay точно не показали дефолтный кадр.
             RefreshSlots();
             Canvas.ForceUpdateCanvases();
-
-            Time.timeScale = openedTimeScale;
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
         }
 
         private void CloseAndSelect()
@@ -95,19 +74,19 @@ namespace UISystem
             if (!isOpened)
                 return;
 
+            if (!uiStateController.IsState(GameUiState.WeaponWheel))
+            {
+                isOpened = false;
+                hoveredSlot = null;
+                return;
+            }
+
             TrySelectHoveredSlot();
 
             isOpened = false;
-
-            if (wheelRoot != null)
-                wheelRoot.SetActive(false);
-
-            Time.timeScale = previousTimeScale;
-
-            Cursor.visible = previousCursorVisible;
-            Cursor.lockState = previousCursorLockState;
-
             hoveredSlot = null;
+
+            uiStateController.TryCloseWeaponWheel();
         }
 
         private void TrySelectHoveredSlot()
@@ -173,6 +152,15 @@ namespace UISystem
                 return;
 
             hoveredSlot = slot;
+        }
+
+        private void OnUiStateChanged(GameUiState state)
+        {
+            if (state == GameUiState.WeaponWheel)
+                return;
+
+            isOpened = false;
+            hoveredSlot = null;
         }
     }
 }

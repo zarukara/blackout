@@ -1,9 +1,7 @@
 using CameraSystem;
-using CombatSystem;
 using PlayerSystem;
 using UISystem;
 using UnityEngine;
-using WeaponSystem;
 
 namespace CoreSystem
 {
@@ -13,41 +11,112 @@ namespace CoreSystem
         [SerializeField] private PlayerInputReader inputReader;
         [SerializeField] private Camera mainCamera;
 
-        [Header("Player References")]
-        [SerializeField] private Health playerHealth;
-        [SerializeField] private PlayerMovement playerMovement;
-        [SerializeField] private PlayerRotation playerRotation;
-        [SerializeField] private PlayerGrabController playerGrabController;
-        [SerializeField] private PlayerMeleeAttack playerMeleeAttack;
-        [SerializeField] private PlayerDashController playerDashController;
-        [SerializeField] private PlayerWeaponCollector playerWeaponCollector;
-        [SerializeField] private PlayerWeaponController playerWeaponController;
+        [Header("Player")]
+        [SerializeField] private PlayerFacade player;
 
-        [Header("Camera References")]
+        [Header("UI")]
+        [SerializeField] private UiFacade ui;
+
+        [Header("Camera")]
         [SerializeField] private CameraRotationController cameraRotationController;
-
-        [Header("UI References")]
-        [SerializeField] private PlayerHealthView playerHealthView;
-        [SerializeField] private GameOverView gameOverView;
-        [SerializeField] private PauseMenuView pauseMenuView;
-        [SerializeField] private WeaponWheelView weaponWheelView;
 
         private void Awake()
         {
-            playerMovement.Initialize(inputReader, mainCamera);
-            playerRotation.Initialize(inputReader, mainCamera);
-            playerGrabController.Initialize(inputReader);
-            playerMeleeAttack.Initialize(playerGrabController);
-            playerDashController.Initialize(inputReader, playerGrabController, mainCamera);
+            ResolveReferences();
 
-            playerWeaponController.Initialize(inputReader, playerWeaponCollector);
+            InitializePlayer();
+            InitializeCamera();
+            InitializeUI();
+        }
+
+        private void ResolveReferences()
+        {
+            ResolvePlayer();
+            ResolveUI();
+        }
+
+        private void ResolvePlayer()
+        {
+            if (player == null)
+                player = FindFirstObjectByType<PlayerFacade>();
+
+            if (player != null)
+                player.CacheReferences();
+        }
+
+        private void ResolveUI()
+        {
+            if (ui == null)
+                ui = FindFirstObjectByType<UiFacade>();
+
+            if (ui != null)
+                ui.CacheReferences();
+        }
+
+        private void InitializePlayer()
+        {
+            if (inputReader == null)
+            {
+                Debug.LogError("PlayerInputReader is missing in Bootstrapper.", this);
+                return;
+            }
+
+            if (mainCamera == null)
+            {
+                Debug.LogError("Main Camera is missing in Bootstrapper.", this);
+                return;
+            }
+
+            if (player == null)
+            {
+                Debug.LogError("PlayerFacade was not found in scene.", this);
+                return;
+            }
+
+            if (!player.IsValid())
+            {
+                Debug.LogError("PlayerFacade has missing references.", player);
+                return;
+            }
+
+            player.TargetingController.Initialize(mainCamera);
+
+            player.Movement.Initialize(inputReader, mainCamera);
+            player.Rotation.Initialize(inputReader, mainCamera);
+            player.GrabController.Initialize(inputReader);
+            player.DashController.Initialize(inputReader, player.GrabController, mainCamera);
+            player.WeaponController.Initialize(inputReader, player.WeaponCollector);
+        }
+
+        private void InitializeCamera()
+        {
+            if (cameraRotationController == null)
+                return;
 
             cameraRotationController.Initialize(inputReader);
+        }
 
-            playerHealthView.Initialize(playerHealth);
-            gameOverView.Initialize(playerHealth);
-            pauseMenuView.Initialize(inputReader, playerHealth);
-            weaponWheelView.Initialize(inputReader, playerWeaponCollector, playerWeaponController);
+        private void InitializeUI()
+        {
+            if (inputReader == null)
+                return;
+
+            if (player == null || !player.IsValid())
+                return;
+
+            if (ui == null)
+            {
+                Debug.LogError("UiFacade was not found in scene.", this);
+                return;
+            }
+
+            if (!ui.IsValid())
+            {
+                Debug.LogError("UiFacade has missing references.", ui);
+                return;
+            }
+
+            ui.Initialize(inputReader, player);
         }
     }
 }
