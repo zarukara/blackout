@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 8036092595468290040}
   - component: {fileID: -2967920828024747468}
   - component: {fileID: 547261566990289519}
+  - component: {fileID: 112233445566778899}
+  - component: {fileID: -6765875867943657882}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -203,6 +205,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 763ee79522633544a974c1db13cb8912, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.EnemyContext
+  target: {fileID: 0}
+  health: {fileID: 547261566990289519}
+  movement: {fileID: 2190410583882994549}
+  meleeAttack: {fileID: 3112779369963210954}
+  rangedAttack: {fileID: 0}
+  grabHandler: {fileID: 8036092595468290040}
 --- !u!114 &8473177422278440795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,6 +306,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatSystem.Health
   maxHealth: 100
   destroyOnDeath: 1
+--- !u!114 &112233445566778899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051230306650694911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81bb5c2030a6abc408418a315968333a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.EnemyFacade
+  health: {fileID: 547261566990289519}
+  context: {fileID: 8702981207485782310}
+  meleeAttack: {fileID: 3112779369963210954}
+  rangedAttack: {fileID: 0}
+--- !u!114 &-6765875867943657882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051230306650694911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d12187d4452314b8691a53589a80ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.TargetableEnemy
+  targetRenderers:
+  - {fileID: 2710870945744512349}
+  - {fileID: 8044920573712735279}
+  outlineMaterial: {fileID: 2100000, guid: 9d015230975e87d48bd4f9baaeb65ce3, type: 2}
+  aimPoint: {fileID: 0}
+  fallbackAimHeight: 1
 --- !u!1 &6462493488777916683
 GameObject:
   m_ObjectHideFlags: 0

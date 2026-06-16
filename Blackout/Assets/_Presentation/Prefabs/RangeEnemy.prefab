@@ -167,6 +167,7 @@ GameObject:
   - component: {fileID: 755563237722065084}
   - component: {fileID: 1724389255279219289}
   - component: {fileID: 903116449261109769}
+  - component: {fileID: 212233445566778899}
   m_Layer: 7
   m_Name: RangeEnemy
   m_TagString: Untagged
@@ -482,3 +483,19 @@ MonoBehaviour:
   outlineMaterial: {fileID: 2100000, guid: 9d015230975e87d48bd4f9baaeb65ce3, type: 2}
   aimPoint: {fileID: 0}
   fallbackAimHeight: 1
+--- !u!114 &212233445566778899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6586494834225879713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81bb5c2030a6abc408418a315968333a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.EnemyFacade
+  health: {fileID: 755563237722065084}
+  context: {fileID: 650560964758714634}
+  meleeAttack: {fileID: 0}
+  rangedAttack: {fileID: 8321027150096054423}
