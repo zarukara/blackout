@@ -109,7 +109,8 @@ namespace CoreSystem
 
             player.AnimationController.Initialize(
                 inputReader,
-                mainCamera
+                mainCamera,
+                player.WeaponController
             );
 
             player.GrabController.Initialize(inputReader);

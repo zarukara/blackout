@@ -1,4 +1,5 @@
 using UnityEngine;
+using WeaponSystem;
 
 namespace PlayerSystem
 {
@@ -7,6 +8,7 @@ namespace PlayerSystem
     {
         private static readonly int MoveXHash = Animator.StringToHash("MoveX");
         private static readonly int MoveYHash = Animator.StringToHash("MoveY");
+        private static readonly int ClawAttackHash = Animator.StringToHash("ClawAttack");
 
         [Header("References")]
         [SerializeField] private Animator animator;
@@ -16,16 +18,25 @@ namespace PlayerSystem
         [SerializeField] private float movementThreshold = 0.01f;
 
         private PlayerInputReader inputReader;
+        private PlayerWeaponController weaponController;
         private Camera mainCamera;
 
         public void Initialize(
             PlayerInputReader inputReader,
-            Camera mainCamera)
+            Camera mainCamera,
+            PlayerWeaponController weaponController)
         {
+            if (this.inputReader != null)
+                this.inputReader.AttackPressed -= OnAttackPressed;
+
             this.inputReader = inputReader;
             this.mainCamera = mainCamera;
+            this.weaponController = weaponController;
 
             CacheReferences();
+
+            if (this.inputReader != null)
+                this.inputReader.AttackPressed += OnAttackPressed;
         }
 
         private void Awake()
@@ -44,6 +55,12 @@ namespace PlayerSystem
                 return;
 
             UpdateLocomotion();
+        }
+
+        private void OnDestroy()
+        {
+            if (inputReader != null)
+                inputReader.AttackPressed -= OnAttackPressed;
         }
 
         [ContextMenu("Cache References")]
@@ -105,6 +122,17 @@ namespace PlayerSystem
                 dampTime,
                 Time.deltaTime
             );
+        }
+
+        private void OnAttackPressed()
+        {
+            if (animator == null || weaponController == null)
+                return;
+
+            if (weaponController.CurrentWeaponType != WeaponType.Claws)
+                return;
+
+            animator.SetTrigger(ClawAttackHash);
         }
     }
 }
