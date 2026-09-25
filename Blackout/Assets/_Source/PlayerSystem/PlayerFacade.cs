@@ -11,6 +11,7 @@ namespace PlayerSystem
         [SerializeField] private Health health;
         [SerializeField] private PlayerMovement movement;
         [SerializeField] private PlayerRotation rotation;
+        [SerializeField] private PlayerAnimationController animationController;
         [SerializeField] private PlayerGrabController grabController;
         [SerializeField] private PlayerDashController dashController;
         [SerializeField] private PlayerTargetingController targetingController;
@@ -22,6 +23,7 @@ namespace PlayerSystem
         public Health Health => health;
         public PlayerMovement Movement => movement;
         public PlayerRotation Rotation => rotation;
+        public PlayerAnimationController AnimationController => animationController;
         public PlayerGrabController GrabController => grabController;
         public PlayerDashController DashController => dashController;
         public PlayerTargetingController TargetingController => targetingController;
@@ -50,6 +52,9 @@ namespace PlayerSystem
             if (rotation == null)
                 rotation = GetComponent<PlayerRotation>();
 
+            if (animationController == null)
+                animationController = GetComponent<PlayerAnimationController>();
+
             if (grabController == null)
                 grabController = GetComponent<PlayerGrabController>();
 
@@ -71,6 +76,7 @@ namespace PlayerSystem
             return health != null
                    && movement != null
                    && rotation != null
+                   && animationController != null
                    && grabController != null
                    && dashController != null
                    && targetingController != null

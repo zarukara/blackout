@@ -57,35 +57,73 @@ namespace CoreSystem
         {
             if (inputReader == null)
             {
-                Debug.LogError("PlayerInputReader is missing in Bootstrapper.", this);
+                Debug.LogError(
+                    "PlayerInputReader is missing in Bootstrapper.",
+                    this
+                );
+
                 return;
             }
 
             if (mainCamera == null)
             {
-                Debug.LogError("Main Camera is missing in Bootstrapper.", this);
+                Debug.LogError(
+                    "Main Camera is missing in Bootstrapper.",
+                    this
+                );
+
                 return;
             }
 
             if (player == null)
             {
-                Debug.LogError("PlayerFacade was not found in scene.", this);
+                Debug.LogError(
+                    "PlayerFacade was not found in scene.",
+                    this
+                );
+
                 return;
             }
 
             if (!player.IsValid())
             {
-                Debug.LogError("PlayerFacade has missing references.", player);
+                Debug.LogError(
+                    "PlayerFacade has missing references.",
+                    player
+                );
+
                 return;
             }
 
             player.TargetingController.Initialize(mainCamera);
 
-            player.Movement.Initialize(inputReader, mainCamera);
-            player.Rotation.Initialize(inputReader, mainCamera);
+            player.Movement.Initialize(
+                inputReader,
+                mainCamera
+            );
+
+            player.Rotation.Initialize(
+                inputReader,
+                mainCamera
+            );
+
+            player.AnimationController.Initialize(
+                inputReader,
+                mainCamera
+            );
+
             player.GrabController.Initialize(inputReader);
-            player.DashController.Initialize(inputReader, player.GrabController, mainCamera);
-            player.WeaponController.Initialize(inputReader, player.WeaponCollector);
+
+            player.DashController.Initialize(
+                inputReader,
+                player.GrabController,
+                mainCamera
+            );
+
+            player.WeaponController.Initialize(
+                inputReader,
+                player.WeaponCollector
+            );
         }
 
         private void InitializeCamera()
@@ -106,13 +144,21 @@ namespace CoreSystem
 
             if (ui == null)
             {
-                Debug.LogError("UiFacade was not found in scene.", this);
+                Debug.LogError(
+                    "UiFacade was not found in scene.",
+                    this
+                );
+
                 return;
             }
 
             if (!ui.IsValid())
             {
-                Debug.LogError("UiFacade has missing references.", ui);
+                Debug.LogError(
+                    "UiFacade has missing references.",
+                    ui
+                );
+
                 return;
             }
 
