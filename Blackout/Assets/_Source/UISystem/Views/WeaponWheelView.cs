@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using PlayerSystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using WeaponSystem;
 
 namespace UISystem
@@ -21,8 +24,7 @@ namespace UISystem
             PlayerInputReader inputReader,
             PlayerWeaponCollector weaponCollector,
             PlayerWeaponController weaponController,
-            UiStateController uiStateController
-        )
+            UiStateController uiStateController)
         {
             this.inputReader = inputReader;
             this.weaponCollector = weaponCollector;
@@ -66,7 +68,10 @@ namespace UISystem
             isOpened = true;
 
             RefreshSlots();
+
             Canvas.ForceUpdateCanvases();
+
+            RefreshHoveredSlotFromPointer();
         }
 
         private void CloseAndSelect()
@@ -81,12 +86,47 @@ namespace UISystem
                 return;
             }
 
+            RefreshHoveredSlotFromPointer();
+
             TrySelectHoveredSlot();
 
             isOpened = false;
             hoveredSlot = null;
 
             uiStateController.TryCloseWeaponWheel();
+        }
+
+        private void RefreshHoveredSlotFromPointer()
+        {
+            hoveredSlot = null;
+
+            if (EventSystem.current == null || Mouse.current == null)
+                return;
+
+            PointerEventData pointerData =
+                new PointerEventData(EventSystem.current)
+                {
+                    position = Mouse.current.position.ReadValue()
+                };
+
+            List<RaycastResult> raycastResults = new();
+
+            EventSystem.current.RaycastAll(
+                pointerData,
+                raycastResults
+            );
+
+            foreach (RaycastResult result in raycastResults)
+            {
+                WeaponWheelSlotView slot =
+                    result.gameObject.GetComponentInParent<WeaponWheelSlotView>();
+
+                if (slot == null)
+                    continue;
+
+                hoveredSlot = slot;
+                return;
+            }
         }
 
         private void TrySelectHoveredSlot()
@@ -96,11 +136,16 @@ namespace UISystem
 
             if (hoveredSlot.IsLocked)
             {
-                Debug.Log($"Weapon is locked: {hoveredSlot.WeaponType}");
+                Debug.Log(
+                    $"Weapon is locked: {hoveredSlot.WeaponType}"
+                );
+
                 return;
             }
 
-            weaponController.SelectWeapon(hoveredSlot.WeaponType);
+            weaponController.SelectWeapon(
+                hoveredSlot.WeaponType
+            );
         }
 
         private void RefreshSlots()
@@ -113,7 +158,9 @@ namespace UISystem
                 if (slot == null)
                     continue;
 
-                bool isUnlocked = weaponCollector.HasWeapon(slot.WeaponType);
+                bool isUnlocked =
+                    weaponCollector.HasWeapon(slot.WeaponType);
+
                 slot.SetLocked(!isUnlocked);
             }
         }
@@ -146,7 +193,8 @@ namespace UISystem
             }
         }
 
-        private void OnSlotPointerEntered(WeaponWheelSlotView slot)
+        private void OnSlotPointerEntered(
+            WeaponWheelSlotView slot)
         {
             if (!isOpened)
                 return;
