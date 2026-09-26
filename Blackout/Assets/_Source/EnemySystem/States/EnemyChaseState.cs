@@ -4,9 +4,11 @@ namespace EnemySystem
     {
         private readonly EnemyContext context;
 
-        public EnemyStateId StateId => EnemyStateId.Chase;
+        public EnemyStateId StateId =>
+            EnemyStateId.Chase;
 
-        public EnemyChaseState(EnemyContext context)
+        public EnemyChaseState(
+            EnemyContext context)
         {
             this.context = context;
         }
@@ -21,19 +23,31 @@ namespace EnemySystem
             if (!context.HasTarget())
                 return;
 
-            if (context.MeleeAttack != null && context.MeleeAttack.CanAttack(context.Target))
+            if (context.MeleeAttack != null &&
+                context.MeleeAttack.CanAttack(
+                    context.Target))
             {
-                context.StateMachine.ChangeState(EnemyStateId.MeleeAttack);
+                context.StateMachine.ChangeState(
+                    EnemyStateId.MeleeAttack
+                );
+
                 return;
             }
 
-            if (context.RangedAttack != null && context.RangedAttack.CanAttack(context.Target))
+            if (context.RangedAttack != null &&
+                context.RangedAttack.IsTargetInRange(
+                    context.Target))
             {
-                context.StateMachine.ChangeState(EnemyStateId.RangedAttack);
+                context.StateMachine.ChangeState(
+                    EnemyStateId.RangedAttack
+                );
+
                 return;
             }
 
-            context.Movement.MoveToTarget(context.Target);
+            context.Movement.MoveToTarget(
+                context.Target
+            );
         }
 
         public void Exit()

@@ -1,3 +1,4 @@
+using System;
 using CombatSystem;
 using UnityEngine;
 
@@ -14,15 +15,20 @@ namespace EnemySystem
 
         public float AttackDistance => attackDistance;
 
+        public event Action AttackPerformed;
+
         public bool CanAttack(Transform target)
         {
             if (target == null)
                 return false;
 
-            Vector3 direction = target.position - transform.position;
+            Vector3 direction =
+                target.position - transform.position;
+
             direction.y = 0f;
 
-            return direction.magnitude <= attackDistance;
+            return direction.sqrMagnitude <=
+                   attackDistance * attackDistance;
         }
 
         public void TryAttack(Transform target)
@@ -36,12 +42,17 @@ namespace EnemySystem
             if (!CanAttack(target))
                 return;
 
-            Health targetHealth = target.GetComponent<Health>();
+            Health targetHealth =
+                target.GetComponent<Health>();
 
             if (targetHealth == null)
                 return;
 
-            nextAttackTime = Time.time + attackCooldown;
+            nextAttackTime =
+                Time.time + attackCooldown;
+
+            AttackPerformed?.Invoke();
+
             targetHealth.TakeDamage(damage);
         }
     }

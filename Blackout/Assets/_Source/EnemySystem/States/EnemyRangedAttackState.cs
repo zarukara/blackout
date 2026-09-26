@@ -14,6 +14,7 @@ namespace EnemySystem
         public void Enter()
         {
             context.Movement.EnableController();
+            context.Movement.Stop();
         }
 
         public void Tick()
@@ -23,19 +24,29 @@ namespace EnemySystem
 
             if (context.RangedAttack == null)
             {
-                context.StateMachine.ChangeState(EnemyStateId.Chase);
+                context.StateMachine.ChangeState(
+                    EnemyStateId.Chase
+                );
+
                 return;
             }
 
-            if (!context.RangedAttack.CanAttack(context.Target))
+            if (!context.RangedAttack.IsTargetInRange(context.Target))
             {
-                context.StateMachine.ChangeState(EnemyStateId.Chase);
+                context.StateMachine.ChangeState(
+                    EnemyStateId.Chase
+                );
+
                 return;
             }
 
-            context.Movement.RotateToTarget(context.Target);
-            context.Movement.ApplyGravity();
-            context.RangedAttack.TryAttack(context.Target);
+            context.Movement.RotateToTarget(
+                context.Target
+            );
+
+            context.RangedAttack.TryAttack(
+                context.Target
+            );
         }
 
         public void Exit()
