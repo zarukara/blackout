@@ -3,57 +3,26 @@ namespace EnemySystem
     public class EnemyMeleeAttackState : IEnemyState
     {
         private readonly EnemyContext context;
+        public EnemyStateId StateId => EnemyStateId.MeleeAttack;
 
-        public EnemyStateId StateId =>
-            EnemyStateId.MeleeAttack;
-
-        public EnemyMeleeAttackState(
-            EnemyContext context)
-        {
-            this.context = context;
-        }
+        public EnemyMeleeAttackState(EnemyContext context) => this.context = context;
 
         public void Enter()
         {
-            context.Movement.EnableController();
             context.Movement.Stop();
+            // Also supports initialization directly into this state.
+            if (context.MeleeAttack != null && !context.MeleeAttack.IsAttacking)
+                context.MeleeAttack.TryBeginAttack(context.Target);
         }
 
         public void Tick()
         {
-            if (!context.HasTarget())
-                return;
-
-            if (context.MeleeAttack == null)
-            {
-                context.StateMachine.ChangeState(
-                    EnemyStateId.Chase
-                );
-
-                return;
-            }
-
-            if (!context.MeleeAttack.CanAttack(
-                    context.Target))
-            {
-                context.StateMachine.ChangeState(
-                    EnemyStateId.Chase
-                );
-
-                return;
-            }
-
-            context.Movement.RotateToTarget(
-                context.Target
-            );
-
-            context.MeleeAttack.TryAttack(
-                context.Target
-            );
+            context.MeleeAttack?.TickAttack();
+            if (context.Health.IsDead) return;
+            if (context.MeleeAttack == null || !context.MeleeAttack.IsAttacking)
+                context.StateMachine.ChangeState(EnemyStateId.Chase);
         }
 
-        public void Exit()
-        {
-        }
+        public void Exit() => context.MeleeAttack?.CancelAttack();
     }
 }

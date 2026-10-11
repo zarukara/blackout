@@ -19,6 +19,9 @@ namespace EnemySystem
         private Rigidbody rigidbodyComponent;
         private Health health;
         private ThrownEnemyDamage thrownEnemyDamage;
+        private EnemyMeleeAttack meleeAttack;
+        private bool detachOnEnable;
+        private bool resumeOnEnable;
 
         private Coroutine recoveryCoroutine;
 
@@ -32,13 +35,42 @@ namespace EnemySystem
             rigidbodyComponent = GetComponent<Rigidbody>();
             health = GetComponent<Health>();
             thrownEnemyDamage = GetComponent<ThrownEnemyDamage>();
+            meleeAttack = GetComponent<EnemyMeleeAttack>();
 
+            PrepareRigidbody();
+        }
+
+        private void OnEnable()
+        {
+            if (detachOnEnable)
+            {
+                transform.SetParent(null, true);
+                detachOnEnable = false;
+            }
+            if (resumeOnEnable)
+            {
+                resumeOnEnable = false;
+                if (health != null && !health.IsDead) stateMachine.ChangeState(EnemyStateId.Chase);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (meleeAttack == null) return;
+            meleeAttack.CancelAttack();
+            if (recoveryCoroutine != null) StopCoroutine(recoveryCoroutine);
+            recoveryCoroutine = null;
+            detachOnEnable = IsGrabbed;
+            resumeOnEnable = IsGrabbed || IsThrown;
+            IsGrabbed = false;
+            IsThrown = false;
+            thrownEnemyDamage?.Deactivate();
             PrepareRigidbody();
         }
 
         public void Grab(Transform holdPoint)
         {
-            if (IsGrabbed || IsThrown)
+            if (IsGrabbed || IsThrown || holdPoint == null || (health != null && health.IsDead))
                 return;
 
             IsGrabbed = true;
@@ -71,7 +103,7 @@ namespace EnemySystem
 
         public void Throw(Vector3 direction, float force)
         {
-            if (!IsGrabbed)
+            if (!IsGrabbed || (health != null && health.IsDead))
                 return;
 
             IsGrabbed = false;
@@ -102,6 +134,9 @@ namespace EnemySystem
         {
             yield return new WaitForSeconds(recoveryDelay);
 
+            recoveryCoroutine = null;
+            if (meleeAttack != null) thrownEnemyDamage?.Deactivate();
+
             if (health == null || health.IsDead)
                 yield break;
 
@@ -127,6 +162,12 @@ namespace EnemySystem
         {
             if (rigidbodyComponent == null)
                 return;
+
+            if (!rigidbodyComponent.isKinematic)
+            {
+                rigidbodyComponent.linearVelocity = Vector3.zero;
+                rigidbodyComponent.angularVelocity = Vector3.zero;
+            }
 
             rigidbodyComponent.isKinematic = true;
             rigidbodyComponent.useGravity = false;

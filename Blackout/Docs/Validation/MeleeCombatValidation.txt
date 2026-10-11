@@ -1,0 +1,16 @@
+PASS
+PASS Single: windup, one hit, recovery, repeated cycle
+PASS Dash and locked-direction misses
+PASS Grab cancels windup; surviving Throw recovers
+PASS Death, disable/re-enable, lost target and stale permissions
+METRIC group=3 starts=4,5,4 minSpacing=1,000 peak=2
+PASS Three enemies: spacing, fairness, limit and no player pushing
+METRIC group=8 starts=3,3,3,3,3,3,2,2 minSpacing=1,000 peak=2
+PASS Eight enemies: spacing, fairness, limit and no player pushing
+PASS Eight enemies pursue moving and escaping target
+PASS Obstacle detour, hit occlusion and collision-safe lunge
+PASS Eight enemies in a narrow passage
+PASS Configurable attack limit and expired permission recovery
+PASS Damage callback cancellation and component lifecycle
+PASS Claws, projectile, Grab query, Throw wall/enemy collisions
+Errors: 0

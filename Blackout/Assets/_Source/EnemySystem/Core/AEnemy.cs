@@ -33,6 +33,8 @@ namespace EnemySystem
         {
             if (Health != null)
                 Health.Died += OnDied;
+            if (Context != null && Context.MeleeAttack != null && Health != null && Health.IsDead)
+                StateMachine.ChangeState(EnemyStateId.Dead);
         }
 
         protected virtual void Start()
@@ -42,6 +44,7 @@ namespace EnemySystem
 
         protected virtual void OnDisable()
         {
+            Context?.MeleeAttack?.CancelAttack();
             if (Health != null)
                 Health.Died -= OnDied;
         }

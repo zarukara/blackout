@@ -39,6 +39,7 @@ namespace EnemySystem
             Subscribe();
 
             SetCombat(startInCombat);
+            if (animator != null && meleeAttack != null) animator.applyRootMotion = false;
         }
 
         private void Update()
@@ -126,6 +127,7 @@ namespace EnemySystem
 
             meleeAttack.AttackPerformed +=
                 OnAttackPerformed;
+            meleeAttack.AttackCancelled += OnAttackCancelled;
 
             isSubscribed = true;
         }
@@ -139,6 +141,7 @@ namespace EnemySystem
             {
                 meleeAttack.AttackPerformed -=
                     OnAttackPerformed;
+                meleeAttack.AttackCancelled -= OnAttackCancelled;
             }
 
             isSubscribed = false;
@@ -147,6 +150,15 @@ namespace EnemySystem
         private void OnAttackPerformed()
         {
             PlayAttack();
+        }
+
+        private void OnAttackCancelled()
+        {
+            if (animator == null) return;
+            animator.ResetTrigger(AttackHash);
+            int idle = Animator.StringToHash("Base Layer.IdleCombat");
+            if (animator.isActiveAndEnabled && animator.HasState(0, idle))
+                animator.CrossFadeInFixedTime(idle, 0.05f);
         }
     }
 }

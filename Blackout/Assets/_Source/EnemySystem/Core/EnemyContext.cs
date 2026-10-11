@@ -82,6 +82,7 @@ namespace EnemySystem
 
         public void SetTarget(Transform newTarget)
         {
+            if (target != newTarget) meleeAttack?.CancelAttack();
             target = newTarget;
         }
 

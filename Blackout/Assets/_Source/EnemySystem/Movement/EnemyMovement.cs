@@ -15,8 +15,61 @@ namespace EnemySystem
         [SerializeField] private float navMeshSearchRadius = 2f;
 
         private NavMeshAgent navMeshAgent;
+        private readonly RaycastHit[] lungeHits = new RaycastHit[32];
+        private Vector3 lastDestination;
+        private float nextPathTime;
+        private bool hasDestination;
 
         public float StoppingDistance => stoppingDistance;
+        public bool IsReady => navMeshAgent != null && navMeshAgent.enabled && navMeshAgent.isOnNavMesh;
+
+        public void MoveToPosition(Vector3 position, float arrivalDistance)
+        {
+            if (!IsReady) return;
+            navMeshAgent.stoppingDistance = arrivalDistance;
+            navMeshAgent.isStopped = false;
+            if (!hasDestination || (Time.time >= nextPathTime &&
+                ((position - lastDestination).sqrMagnitude > 0.15f * 0.15f ||
+                 (!navMeshAgent.pathPending && !navMeshAgent.hasPath))))
+            {
+                navMeshAgent.SetDestination(position);
+                lastDestination = position;
+                hasDestination = true;
+                nextPathTime = Time.time + 0.2f;
+            }
+            RotateToDirection(navMeshAgent.desiredVelocity);
+        }
+
+        public void MoveAttack(Vector3 direction, float distance, Transform target, LayerMask obstacles)
+        {
+            if (!IsReady || distance <= 0f) return;
+            Vector3 origin = navMeshAgent.nextPosition;
+            // Preserve space even though player contact is ignored physically.
+            if (target != null)
+            {
+                Vector3 toTarget = target.position - origin;
+                toTarget.y = 0f;
+                if (Vector3.Dot(direction, toTarget) > 0f)
+                    distance = Mathf.Min(distance, Mathf.Max(0f, toTarget.magnitude - navMeshAgent.radius - 0.4f));
+            }
+            if (distance <= 0f) return;
+            Vector3 end = origin + direction * distance;
+            if (NavMesh.Raycast(origin, end, out NavMeshHit edge, navMeshAgent.areaMask))
+                distance = Mathf.Min(distance, Mathf.Max(0f, Vector3.Distance(origin, edge.position) - 0.03f));
+
+            float radius = navMeshAgent.radius;
+            int count = Physics.CapsuleCastNonAlloc(origin + Vector3.up * (radius + 0.05f),
+                origin + Vector3.up * Mathf.Max(radius + 0.05f, navMeshAgent.height - radius),
+                radius, direction, lungeHits, distance + 0.03f, obstacles, QueryTriggerInteraction.Ignore);
+            if (count == lungeHits.Length) return;
+            for (int i = 0; i < count; i++)
+            {
+                Transform hit = lungeHits[i].transform;
+                if (hit.IsChildOf(transform) || (target != null && hit.IsChildOf(target))) continue;
+                distance = Mathf.Min(distance, Mathf.Max(0f, lungeHits[i].distance - 0.03f));
+            }
+            if (distance > 0f) navMeshAgent.Move(direction * distance);
+        }
 
         private void Awake()
         {
@@ -87,7 +140,9 @@ namespace EnemySystem
             }
 
             navMeshAgent.isStopped = true;
-            navMeshAgent.ResetPath();
+            if (navMeshAgent.hasPath || navMeshAgent.pathPending) navMeshAgent.ResetPath();
+            navMeshAgent.velocity = Vector3.zero;
+            hasDestination = false;
         }
 
         public void DisableController()
@@ -111,6 +166,12 @@ namespace EnemySystem
         {
             if (navMeshAgent == null)
                 return;
+
+            // State transitions during normal combat must never snap/warp the agent.
+            if (IsReady)
+                return;
+
+            hasDestination = false;
 
             if (NavMesh.SamplePosition(
                     transform.position,

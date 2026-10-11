@@ -20,20 +20,14 @@ namespace EnemySystem
 
         public void Tick()
         {
-            if (!context.HasTarget())
-                return;
-
-            if (context.MeleeAttack != null &&
-                context.MeleeAttack.CanAttack(
-                    context.Target))
+            if (context.MeleeAttack != null)
             {
-                context.StateMachine.ChangeState(
-                    EnemyStateId.MeleeAttack
-                );
-
+                context.MeleeAttack.TickChase(context.Target);
                 return;
             }
 
+            if (!context.HasTarget())
+                return;
             if (context.RangedAttack != null &&
                 context.RangedAttack.IsTargetInRange(
                     context.Target))
