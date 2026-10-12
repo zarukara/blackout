@@ -103,23 +103,38 @@ namespace EnemySystem
 
         private Vector3 GetDirectionToTarget(Transform target)
         {
-            Vector3 origin = firePoint != null
-                ? firePoint.position
-                : transform.position;
+            Vector3 origin = firePoint.position;
 
-            Vector3 direction = target.position - origin;
-            direction.y = 0f;
+            CharacterController controller =
+                target.GetComponentInChildren<CharacterController>();
 
-            if (direction.sqrMagnitude <= 0.001f)
+            Collider targetCollider =
+                target.GetComponentInChildren<Collider>();
+
+            Vector3 aimPoint = controller != null
+                ? controller.bounds.center
+                : targetCollider != null
+                    ? targetCollider.bounds.center
+                    : target.position + Vector3.up;
+
+            Vector3 direction = aimPoint - origin;
+
+            if (direction.sqrMagnitude < 0.001f)
                 direction = transform.forward;
 
             direction.Normalize();
 
-            if (spreadAngle <= 0f)
-                return direction;
+            if (spreadAngle > 0f)
+            {
+                float angle = Random.Range(-spreadAngle, spreadAngle);
 
-            float randomAngle = Random.Range(-spreadAngle, spreadAngle);
-            return (Quaternion.Euler(0f, randomAngle, 0f) * direction).normalized;
+                direction = Quaternion.AngleAxis(
+                    angle,
+                    Vector3.up
+                ) * direction;
+            }
+
+            return direction.normalized;
         }
 
         private void CacheReferences()
