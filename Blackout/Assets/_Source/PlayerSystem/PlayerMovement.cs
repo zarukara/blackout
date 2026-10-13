@@ -37,16 +37,7 @@ namespace PlayerSystem
         {
             Vector2 input = inputReader.MoveInput;
 
-            Vector3 cameraForward = mainCamera.transform.forward;
-            Vector3 cameraRight = mainCamera.transform.right;
-
-            cameraForward.y = 0f;
-            cameraRight.y = 0f;
-
-            cameraForward.Normalize();
-            cameraRight.Normalize();
-
-            Vector3 moveDirection = cameraRight * input.x + cameraForward * input.y;
+            Vector3 moveDirection = CameraRelativeMovement.GetDirection(input, mainCamera.transform);
             moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
 
             if (characterController.isGrounded && verticalVelocity.y < 0f)

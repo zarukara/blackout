@@ -73,18 +73,7 @@ namespace PlayerSystem
                 return transform.forward;
             }
 
-            Vector3 cameraForward = mainCamera.transform.forward;
-            Vector3 cameraRight = mainCamera.transform.right;
-
-            cameraForward.y = 0f;
-            cameraRight.y = 0f;
-
-            cameraForward.Normalize();
-            cameraRight.Normalize();
-
-            Vector3 direction = cameraRight * moveInput.x + cameraForward * moveInput.y;
-            direction.y = 0f;
-
+            Vector3 direction = CameraRelativeMovement.GetDirection(moveInput, mainCamera.transform);
             return direction.normalized;
         }
 

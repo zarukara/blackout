@@ -40,6 +40,18 @@ namespace PlayerSystem
             CacheReferences();
         }
 
+        public void Initialize(PlayerInputReader inputReader, Camera mainCamera)
+        {
+            // Bootstrapper resolves and validates references before initialization.
+            targetingController.Initialize(mainCamera);
+            movement.Initialize(inputReader, mainCamera);
+            rotation.Initialize(inputReader, mainCamera);
+            animationController.Initialize(inputReader, mainCamera, weaponController);
+            grabController.Initialize(inputReader);
+            dashController.Initialize(inputReader, grabController, mainCamera);
+            weaponController.Initialize(inputReader, weaponCollector);
+        }
+
         [ContextMenu("Cache References")]
         public void CacheReferences()
         {

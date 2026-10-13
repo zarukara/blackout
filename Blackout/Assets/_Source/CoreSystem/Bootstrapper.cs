@@ -95,36 +95,7 @@ namespace CoreSystem
                 return;
             }
 
-            player.TargetingController.Initialize(mainCamera);
-
-            player.Movement.Initialize(
-                inputReader,
-                mainCamera
-            );
-
-            player.Rotation.Initialize(
-                inputReader,
-                mainCamera
-            );
-
-            player.AnimationController.Initialize(
-                inputReader,
-                mainCamera,
-                player.WeaponController
-            );
-
-            player.GrabController.Initialize(inputReader);
-
-            player.DashController.Initialize(
-                inputReader,
-                player.GrabController,
-                mainCamera
-            );
-
-            player.WeaponController.Initialize(
-                inputReader,
-                player.WeaponCollector
-            );
+            player.Initialize(inputReader, mainCamera);
         }
 
         private void InitializeCamera()

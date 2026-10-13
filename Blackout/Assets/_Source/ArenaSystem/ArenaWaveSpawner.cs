@@ -10,12 +10,6 @@ namespace ArenaSystem
 {
     public class ArenaWaveSpawner : MonoBehaviour
     {
-        private enum EnemySpawnType
-        {
-            Melee,
-            Ranged
-        }
-
         [Header("Enemy Prefabs")]
         [SerializeField] private EnemyFacade meleeEnemyPrefab;
         [SerializeField] private EnemyFacade rangedEnemyPrefab;
@@ -99,7 +93,7 @@ namespace ArenaSystem
             for (currentWaveIndex = 0; currentWaveIndex < waves.Count; currentWaveIndex++)
             {
                 ArenaWaveData wave = waves[currentWaveIndex];
-                List<EnemySpawnType> spawnQueue = CreateSpawnQueue(wave);
+                List<EnemySpawnType> spawnQueue = ArenaWaveQueue.Create(wave);
 
                 totalEnemiesInCurrentWave = spawnQueue.Count;
                 remainingEnemiesInCurrentWave = 0;
@@ -136,49 +130,6 @@ namespace ArenaSystem
 
                 if (wave.SpawnInterval > 0f)
                     yield return new WaitForSeconds(wave.SpawnInterval);
-            }
-        }
-
-        private List<EnemySpawnType> CreateSpawnQueue(ArenaWaveData wave)
-        {
-            List<EnemySpawnType> spawnQueue = new();
-
-            int totalEnemyCount = Mathf.Max(0, wave.TotalEnemyCount);
-
-            if (totalEnemyCount == 0)
-                return spawnQueue;
-
-            float meleePercent = Mathf.Max(0f, wave.MeleePercent);
-            float rangedPercent = Mathf.Max(0f, wave.RangedPercent);
-            float totalPercent = meleePercent + rangedPercent;
-
-            if (totalPercent <= 0f)
-            {
-                meleePercent = 100f;
-                rangedPercent = 0f;
-                totalPercent = 100f;
-            }
-
-            int meleeCount = Mathf.RoundToInt(totalEnemyCount * (meleePercent / totalPercent));
-            int rangedCount = totalEnemyCount - meleeCount;
-
-            for (int i = 0; i < meleeCount; i++)
-                spawnQueue.Add(EnemySpawnType.Melee);
-
-            for (int i = 0; i < rangedCount; i++)
-                spawnQueue.Add(EnemySpawnType.Ranged);
-
-            Shuffle(spawnQueue);
-
-            return spawnQueue;
-        }
-
-        private void Shuffle(List<EnemySpawnType> spawnQueue)
-        {
-            for (int i = 0; i < spawnQueue.Count; i++)
-            {
-                int randomIndex = UnityEngine.Random.Range(i, spawnQueue.Count);
-                (spawnQueue[i], spawnQueue[randomIndex]) = (spawnQueue[randomIndex], spawnQueue[i]);
             }
         }
 
@@ -364,31 +315,5 @@ namespace ArenaSystem
                 );
             }
         }
-    }
-
-    [Serializable]
-    public class ArenaWaveData
-    {
-        [SerializeField] private string waveName = "Wave";
-
-        [Min(0)]
-        [SerializeField] private int totalEnemyCount = 3;
-
-        [Header("Enemy Ratio")]
-        [Range(0f, 100f)]
-        [SerializeField] private float meleePercent = 100f;
-
-        [Range(0f, 100f)]
-        [SerializeField] private float rangedPercent = 0f;
-
-        [Header("Timing")]
-        [Min(0f)]
-        [SerializeField] private float spawnInterval = 0.4f;
-
-        public string WaveName => waveName;
-        public int TotalEnemyCount => totalEnemyCount;
-        public float MeleePercent => meleePercent;
-        public float RangedPercent => rangedPercent;
-        public float SpawnInterval => spawnInterval;
     }
 }
