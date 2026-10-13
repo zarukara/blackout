@@ -14,6 +14,7 @@ namespace EnemySystem
 
         private static readonly int AttackHash =
             Animator.StringToHash("Attack");
+        private static readonly int LocomotionSpeedHash = Animator.StringToHash("LocomotionSpeed");
 
         [Header("References")]
         [SerializeField] private Animator animator;
@@ -22,11 +23,16 @@ namespace EnemySystem
 
         [Header("Locomotion")]
         [SerializeField] private float speedDampTime = 0.1f;
+        [SerializeField, Min(.01f)] private float locomotionReferenceSpeed = 3.8f;
 
         [Header("Combat")]
         [SerializeField] private bool startInCombat = true;
 
         private bool isSubscribed;
+        private bool hasSpeed;
+        private bool hasCombat;
+        private bool hasAttack;
+        private bool hasLocomotionSpeed;
 
         private void Awake()
         {
@@ -36,9 +42,11 @@ namespace EnemySystem
         private void OnEnable()
         {
             CacheReferences();
+            CacheParameters();
             Subscribe();
 
             SetCombat(startInCombat);
+            if (animator != null) animator.applyRootMotion = false;
         }
 
         private void Update()
@@ -71,7 +79,7 @@ namespace EnemySystem
 
         public void SetCombat(bool value)
         {
-            if (animator == null)
+            if (animator == null || !hasCombat)
                 return;
 
             animator.SetBool(
@@ -82,7 +90,7 @@ namespace EnemySystem
 
         public void PlayAttack()
         {
-            if (animator == null)
+            if (animator == null || !hasAttack)
                 return;
 
             animator.ResetTrigger(AttackHash);
@@ -91,14 +99,14 @@ namespace EnemySystem
 
         private void UpdateMovement()
         {
-            if (animator == null)
+            if (animator == null || !hasSpeed)
                 return;
 
             float speed = 0f;
 
             if (navMeshAgent != null &&
                 navMeshAgent.enabled &&
-                navMeshAgent.isOnNavMesh)
+                navMeshAgent.isOnNavMesh && !navMeshAgent.isStopped)
             {
                 Vector3 velocity =
                     navMeshAgent.velocity;
@@ -114,6 +122,8 @@ namespace EnemySystem
                 speedDampTime,
                 Time.deltaTime
             );
+            if (hasLocomotionSpeed)
+                animator.SetFloat(LocomotionSpeedHash, Mathf.Max(.05f, speed / locomotionReferenceSpeed), speedDampTime, Time.deltaTime);
         }
 
         private void Subscribe()
@@ -126,6 +136,7 @@ namespace EnemySystem
 
             meleeAttack.AttackPerformed +=
                 OnAttackPerformed;
+            meleeAttack.AttackCancelled += OnAttackCancelled;
 
             isSubscribed = true;
         }
@@ -139,6 +150,7 @@ namespace EnemySystem
             {
                 meleeAttack.AttackPerformed -=
                     OnAttackPerformed;
+                meleeAttack.AttackCancelled -= OnAttackCancelled;
             }
 
             isSubscribed = false;
@@ -147,6 +159,27 @@ namespace EnemySystem
         private void OnAttackPerformed()
         {
             PlayAttack();
+        }
+
+        private void OnAttackCancelled()
+        {
+            if (animator == null || !hasAttack || !animator.isActiveAndEnabled) return;
+            animator.ResetTrigger(AttackHash);
+            int idle = Animator.StringToHash("Base Layer.IdleCombat");
+            if (animator.HasState(0, idle)) animator.CrossFadeInFixedTime(idle, .05f);
+        }
+
+        private void CacheParameters()
+        {
+            hasSpeed = hasCombat = hasAttack = hasLocomotionSpeed = false;
+            if (animator == null || animator.runtimeAnimatorController == null) return;
+            foreach (AnimatorControllerParameter parameter in animator.parameters)
+            {
+                if (parameter.nameHash == SpeedHash && parameter.type == AnimatorControllerParameterType.Float) hasSpeed = true;
+                if (parameter.nameHash == IsInCombatHash && parameter.type == AnimatorControllerParameterType.Bool) hasCombat = true;
+                if (parameter.nameHash == AttackHash && parameter.type == AnimatorControllerParameterType.Trigger) hasAttack = true;
+                if (parameter.nameHash == LocomotionSpeedHash && parameter.type == AnimatorControllerParameterType.Float) hasLocomotionSpeed = true;
+            }
         }
     }
 }

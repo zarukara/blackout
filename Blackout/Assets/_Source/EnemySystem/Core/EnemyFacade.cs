@@ -47,7 +47,11 @@ namespace EnemySystem
 
         public void Initialize(EnemySpawnContext spawnContext)
         {
-            if (context != null)
+            CacheReferences();
+            AEnemy actor = GetComponent<AEnemy>();
+            if (actor != null)
+                actor.SetTarget(spawnContext.Target);
+            else if (context != null)
                 context.SetTarget(spawnContext.Target);
 
             if (rangedAttack != null)

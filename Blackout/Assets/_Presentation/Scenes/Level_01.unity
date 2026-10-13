@@ -4587,6 +4587,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoreSystem.Bootstrapper
   inputReader: {fileID: 789952520}
   mainCamera: {fileID: 963194227}
+  projectilePool: {fileID: 1029824952}
   player: {fileID: 593948420879275274}
   ui: {fileID: 1374624805}
   cameraRotationController: {fileID: 1816709038}
@@ -8070,6 +8071,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1506836947}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &1812179637
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1812179638}
+  m_Layer: 0
+  m_Name: ShootPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1812179638
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1812179637}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -0.01156, y: 0.00015, z: 0.00112}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 593948420879275248}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1816709032
 GameObject:
   m_ObjectHideFlags: 0
@@ -9563,9 +9595,17 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3131449267787256425, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+      propertyPath: firePoint
+      value:
+      objectReference: {fileID: 1812179638}
+    - target: {fileID: 3131449267787256425, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
       propertyPath: aimProvider
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3131449267787256425, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+      propertyPath: weaponVisual
+      value:
+      objectReference: {fileID: 593948420879275248}
     - target: {fileID: 3131449267787256425, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
       propertyPath: projectilePool
       value: 
@@ -9775,9 +9815,17 @@ PrefabInstance:
     - {fileID: 6255814950903589738, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
     - {fileID: 9195456533844948965, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
     - {fileID: 2466393087480323299, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2385688776503409802, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1812179638}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+--- !u!4 &593948420879275248 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2385688776503409802, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+  m_PrefabInstance: {fileID: 593948420879275247}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &593948420879275264 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9202545738165523042, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}

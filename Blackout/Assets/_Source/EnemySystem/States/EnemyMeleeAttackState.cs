@@ -22,7 +22,10 @@ namespace EnemySystem
         public void Tick()
         {
             if (!context.HasTarget())
+            {
+                context.MeleeAttack?.CancelAttack();
                 return;
+            }
 
             if (context.MeleeAttack == null)
             {
@@ -32,6 +35,8 @@ namespace EnemySystem
 
                 return;
             }
+
+            if (context.MeleeAttack.IsAttacking) return;
 
             if (!context.MeleeAttack.CanAttack(
                     context.Target))
@@ -54,6 +59,7 @@ namespace EnemySystem
 
         public void Exit()
         {
+            context.MeleeAttack?.CancelAttack();
         }
     }
 }

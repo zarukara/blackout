@@ -121,12 +121,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1018823019819385983}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.33060423, y: 0.8690278, z: -0.099151276, w: 0.35448647}
-  m_LocalPosition: {x: -0.0453, y: 0.0761, z: -0.0228}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -0.11, y: 0.045, z: 0.008}
   m_LocalScale: {x: 0.02, y: 0.16787486, z: 0.02}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6336980194744436139}
+  m_Father: {fileID: 9109872420926465297}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 32.49}
 --- !u!33 &5154011672642678396
 MeshFilter:
@@ -416,6 +416,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 1536389727458988886}
   meleeAttack: {fileID: 3112779369963210954}
   speedDampTime: 0.1
+  locomotionReferenceSpeed: 3.974
   startInCombat: 1
 --- !u!114 &-1352853901379508499
 MonoBehaviour:
@@ -429,7 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bfd0b98010a6cd4e828d27533f60a21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.EnemyActor
-  target: {fileID: 1822547680172940319, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+  target: {fileID: 0}
   startState: 0
 --- !u!114 &8702981207485782310
 MonoBehaviour:
@@ -492,6 +493,8 @@ MonoBehaviour:
   damage: 10
   attackDistance: 1.7
   attackCooldown: 1
+  impactDelay: 0.4
+  animationDuration: 1
 --- !u!114 &8036092595468290040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -882,7 +885,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3028217109973498716}
-  - {fileID: 1235377789273029698}
   m_Father: {fileID: 9109872420926465297}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4001260592176212188
@@ -1804,6 +1806,7 @@ Transform:
   m_Children:
   - {fileID: 6336980194744436139}
   - {fileID: 1935790485920071725}
+  - {fileID: 1235377789273029698}
   m_Father: {fileID: 7801388664146506030}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8776641280113573660

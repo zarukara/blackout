@@ -8,6 +8,7 @@ namespace EnemySystem
     {
         [Header("Target")]
         [SerializeField] private Transform target;
+        private Health targetHealth;
 
         [Header("Core")]
         [SerializeField] private Health health;
@@ -76,18 +77,19 @@ namespace EnemySystem
         public void Initialize(AEnemy enemy, Transform target)
         {
             Enemy = enemy;
-            this.target = target;
+            SetTarget(target);
             CacheReferences();
         }
 
         public void SetTarget(Transform newTarget)
         {
             target = newTarget;
+            targetHealth = target != null ? target.GetComponentInParent<Health>() : null;
         }
 
         public bool HasTarget()
         {
-            return target != null;
+            return target != null && target.gameObject.activeInHierarchy && (targetHealth == null || !targetHealth.IsDead);
         }
 
         public bool IsValid()

@@ -17,6 +17,7 @@ namespace EnemySystem
         protected EnemyContext Context { get; private set; }
         protected EnemyStateMachine StateMachine { get; private set; }
         protected Health Health { get; private set; }
+        public Transform Target => target;
 
         protected virtual void Awake()
         {

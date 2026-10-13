@@ -21,7 +21,10 @@ namespace EnemySystem
         public void Tick()
         {
             if (!context.HasTarget())
+            {
+                context.Movement.Stop();
                 return;
+            }
 
             if (context.MeleeAttack != null &&
                 context.MeleeAttack.CanAttack(

@@ -230,7 +230,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7367676424008527431}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -244,7 +244,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 605724866074310697}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -0.01156, y: 0.00015, z: 0.00112}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1824,6 +1824,7 @@ GameObject:
   - component: {fileID: 903116449261109769}
   - component: {fileID: 212233445566778899}
   - component: {fileID: 1855663618914741306}
+  - component: {fileID: 624932852239969688}
   m_Layer: 7
   m_Name: RangeEnemy
   m_TagString: Untagged
@@ -1870,7 +1871,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!143 &4541133184120881976
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1887,7 +1888,7 @@ CharacterController:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Height: 2
   m_Radius: 0.5
@@ -1935,7 +1936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bfd0b98010a6cd4e828d27533f60a21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.EnemyActor
-  target: {fileID: 1822547680172940319, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+  target: {fileID: 0}
   startState: 0
 --- !u!114 &650560964758714634
 MonoBehaviour:
@@ -1981,6 +1982,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.EnemyRangedAttack
   projectilePool: {fileID: 0}
   firePoint: {fileID: 7367676424008527431}
+  weaponVisual: {fileID: 6022123746805472294}
+  aimPivot: {fileID: 5242153552123496675}
   damage: 10
   projectileSpeed: 50
   attackRange: 8
@@ -2082,7 +2085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.TargetableEnemy
   targetRenderers:
-  - {fileID: -6719491189274894284, guid: 9c6c8a9e86ef0984eaf4bb57c02cb59c, type: 3}
+  - {fileID: 2070426568668651234}
   outlineMaterial: {fileID: 2100000, guid: f3c065c4fba25fb4781d610c61cefcb6, type: 2}
   aimPoint: {fileID: 0}
   fallbackAimHeight: 1
@@ -2124,6 +2127,24 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &624932852239969688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6586494834225879713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 610259d53a07e9b40bba804bfc47217c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.EnemyAnimationController
+  animator: {fileID: 6897950678781719249}
+  navMeshAgent: {fileID: 1855663618914741306}
+  meleeAttack: {fileID: 0}
+  speedDampTime: 0.1
+  locomotionReferenceSpeed: 3.768
+  startInCombat: 1
 --- !u!1 &6689656272796046996
 GameObject:
   m_ObjectHideFlags: 0

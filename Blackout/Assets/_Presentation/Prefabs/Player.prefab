@@ -613,7 +613,7 @@ GameObject:
   - component: {fileID: 2306453645515936310}
   - component: {fileID: 5055882405016276517}
   - component: {fileID: 9202545738165523042}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -637,7 +637,6 @@ Transform:
   - {fileID: 8623298250850324055}
   - {fileID: 4418290121746699903}
   - {fileID: 1006573546817210656}
-  - {fileID: 4414566314231497316}
   - {fileID: 1946417032958148956}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -702,10 +701,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSystem.PlayerAnimationController
   animator: {fileID: 5130998663098402190}
-  pistolVisual: {fileID: 0}
+  pistolVisual: {fileID: 2466393087480323299}
   dampTime: 0.1
   movementThreshold: 0.01
   pistolLayerName: Pistol
+  weaponBlendTime: 0.12
 --- !u!114 &3941102781235748647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -795,6 +795,8 @@ MonoBehaviour:
   weaponType: 10
   projectilePool: {fileID: 0}
   firePoint: {fileID: 4414566314231497316}
+  weaponVisual: {fileID: 2986365796488185433}
+  aimPivot: {fileID: 7628848436769952781}
   targetingController: {fileID: 9202545738165523042}
   damage: 50
   projectileSpeed: 50
@@ -918,12 +920,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2141609992228091588}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.424, y: 0.205, z: 1.5}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -0.01156, y: 0.00015, z: 0.00112}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1822547680172940319}
+  m_Father: {fileID: 2986365796488185433}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2322955885666105770
 GameObject:
@@ -2884,9 +2886,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d683b679c0c0fbc42a226f373ceb4888, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4414566314231497316}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d683b679c0c0fbc42a226f373ceb4888, type: 3}
+--- !u!1 &2466393087480323299 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d683b679c0c0fbc42a226f373ceb4888, type: 3}
+  m_PrefabInstance: {fileID: 3385311244049408434}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2986365796488185433 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d683b679c0c0fbc42a226f373ceb4888, type: 3}

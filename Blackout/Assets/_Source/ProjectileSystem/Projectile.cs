@@ -41,7 +41,7 @@ namespace ProjectileSystem
             if (!isLaunched)
                 return;
 
-            if (other.gameObject == owner)
+            if (owner != null && other.transform.IsChildOf(owner.transform))
                 return;
 
             if (!IsInLayerMask(other.gameObject.layer, hitLayers))

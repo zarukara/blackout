@@ -88,6 +88,7 @@ namespace EnemySystem
 
             navMeshAgent.isStopped = true;
             navMeshAgent.ResetPath();
+            navMeshAgent.velocity = Vector3.zero;
         }
 
         public void DisableController()
@@ -110,6 +111,9 @@ namespace EnemySystem
         public void EnableController()
         {
             if (navMeshAgent == null)
+                return;
+
+            if (navMeshAgent.enabled && navMeshAgent.isOnNavMesh)
                 return;
 
             if (NavMesh.SamplePosition(
