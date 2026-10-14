@@ -3243,6 +3243,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UISystem.WeaponWheelSlotView
   weaponType: 13
   lockedOverlay: {fileID: 0}
+--- !u!1 &914653536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 914653538}
+  - component: {fileID: 914653537}
+  m_Layer: 0
+  m_Name: Hit Blood VFX Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &914653537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914653536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1f5f2e1df9e44a7a1fac27899af112a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VfxSystem.HitBloodVfxPool
+  prefab: {fileID: 3819142707697438349, guid: 07118d5db9cbfcb4891bd86b9d6c1283, type: 3}
+  capacity: 32
+--- !u!4 &914653538
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914653536}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &917911765
 GameObject:
   m_ObjectHideFlags: 0
@@ -4529,6 +4575,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoreSystem.Bootstrapper
   inputReader: {fileID: 789952520}
   mainCamera: {fileID: 963194227}
+  hitBloodPool: {fileID: 914653537}
   player: {fileID: 593948420879275274}
   ui: {fileID: 1374624805}
   cameraRotationController: {fileID: 1816709038}
@@ -5514,6 +5561,7 @@ MonoBehaviour:
   rangedEnemyPrefab: {fileID: 212233445566778899, guid: 3542e42d85b5a364da7b9e592a2ec95b, type: 3}
   enemyTarget: {fileID: 1242824110}
   projectilePool: {fileID: 1029824952}
+  hitBloodPool: {fileID: 914653537}
   spawnPoints:
   - {fileID: 1456115357}
   - {fileID: 2020430269}
@@ -10296,3 +10344,4 @@ SceneRoots:
   - {fileID: 1475584391}
   - {fileID: 1962032714}
   - {fileID: 117871095}
+  - {fileID: 914653538}

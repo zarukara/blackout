@@ -1,7 +1,9 @@
 using CameraSystem;
+using EnemySystem;
 using PlayerSystem;
 using UISystem;
 using UnityEngine;
+using VfxSystem;
 
 namespace CoreSystem
 {
@@ -10,6 +12,7 @@ namespace CoreSystem
         [Header("Scene References")]
         [SerializeField] private PlayerInputReader inputReader;
         [SerializeField] private Camera mainCamera;
+        [SerializeField] private HitBloodVfxPool hitBloodPool;
 
         [Header("Player")]
         [SerializeField] private PlayerFacade player;
@@ -33,6 +36,13 @@ namespace CoreSystem
         {
             ResolvePlayer();
             ResolveUI();
+        }
+
+        private void Start()
+        {
+            // Scene-placed enemies are wired once; spawned enemies use EnemySpawnContext.
+            foreach (EnemyHitVfx hitVfx in FindObjectsByType<EnemyHitVfx>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                hitVfx.Initialize(hitBloodPool);
         }
 
         private void ResolvePlayer()

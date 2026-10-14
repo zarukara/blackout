@@ -1,5 +1,40 @@
 # BlackHost: combat / animation integration
 
+## 14.10.2026 — следование Hit Blood за врагом
+
+Основной ImpactSplash переведён в Local simulation и следует за точкой попадания относительно Chest в LateUpdate после анимации/наведения. Капли остаются в World simulation и продолжают собственные траектории. При отключении/уничтожении цели эффект заканчивается на последней позиции; при возврате в пул ссылка на цель очищается. Изменены `EnemyHitVfx.cs`, `HitBloodVfxPool.cs`, `HitBloodVfx.cs` и одна настройка в `HitBloodVfx.prefab`.
+
+Unity 6000.3.8f1: компиляция и 15 проверок в графическом PlayMode — перемещение/поворот/движение Chest, положение самой частицы, независимость капель, две цели, отключение/уничтожение цели, возврат и повторное использование пула; 0 runtime errors. Результаты: `Logs/BloodFollow-tests.txt`, снимки `Logs/HitBloodVisualReview/blood-follow-before.png` и `blood-follow-after.png`. Ручных назначений нет; существующий урон и параметры частиц сохранены.
+
+## 14.10.2026 — Hit Blood VFX
+
+Основа: HEAD `a316c25`. Исходный `Assets/_Presentation/VFX/BlackHost_RedLiquid_Hit_2x2.png` найден: RGBA 1024×1024, 947898 полностью прозрачных пикселей, четыре ячейки с прозрачными отступами. PNG не изменён; импорт настроен на alpha transparency, Clamp, Bilinear, без mipmaps и компрессии. AGENTS.md и прежнего VerticalSlice_Functionality.md в текущем checkout нет; использовано приложенное ТЗ.
+
+Готовый `HitBloodVfx.prefab`: ImpactSplash — одна billboard-частица 0,16 с, native random Start Frame 0..1 для сетки 2×2, Frame over Time = 0 (кадр не меняется), размер 0,92–1,12 с небольшим ростом и alpha fade. Droplets — 5–10 отдельных овальных капель, размер 0,035–0,08, скорость 1,4–3,4, lifetime 0,28–0,58 с, конус 28°, гравитация 1,1, уменьшение и затухание. Оба материала URP Particles/Unlit, обычный Alpha Blend, без Emission/Additive; существующий Bloom не изменён.
+
+`Health.Damaged(DamageInfo)` вызывается после подтверждённого урона, содержит фактический урон, контакт, направление и IsLethal. EnemyHitVfx подписан только на здоровье врагов. Пули передают ближайшую точку коллайдера, когти — ближайшую точку на уровне корпуса, Throw — ContactPoint; старый TakeDamage(int) поддержан с fallback на Chest. Летальный удар сейчас даёт один обычный Hit Blood; IsLethal позволяет позже заменить его отдельной веткой Death VFX. Существующие HealthChanged/Died, урон, cooldown, попадания и FSM сохранены.
+
+В Level_01 назначен общий пул: 32 заранее созданных экземпляра, поиск свободного слота, при насыщении переиспользование по кольцу. Новых Instantiate/Destroy и материалов на попаданиях нет. Particle Systems очищаются перед повторным использованием и возвращаются после завершения. World simulation капель и отдельный сценовый родитель позволяют каплям пережить уничтожение врага. Пул передаётся спавнером через EnemySpawnContext/EnemyFacade; сценовые враги получают его один раз из Bootstrapper.Start.
+
+Изменённый код:
+
+- `Assets/_Source/CombatSystem/Health.cs`
+- `Assets/_Source/ProjectileSystem/Projectile.cs`
+- `Assets/_Source/WeaponSystem/ClawsWeapon.cs`
+- `Assets/_Source/EnemySystem/Grab/ThrownEnemyDamage.cs`
+- `Assets/_Source/EnemySystem/Core/EnemyFacade.cs`
+- `Assets/_Source/EnemySystem/Core/EnemySpawnContext.cs`
+- `Assets/_Source/ArenaSystem/ArenaWaveSpawner.cs`
+- `Assets/_Source/CoreSystem/Bootstrapper.cs`
+
+Новый код с .meta: `Assets/_Source/CombatSystem/DamageInfo.cs`, `Assets/_Source/EnemySystem/Combat/EnemyHitVfx.cs`, `Assets/_Source/VfxSystem/HitBloodVfx.cs`, `Assets/_Source/VfxSystem/HitBloodVfxPool.cs`; также .meta новой папки VfxSystem.
+
+Assets, сохранённые через Unity Editor API: изменены `Assets/_Presentation/Prefabs/Enemy.prefab`, `Assets/_Presentation/Prefabs/RangeEnemy.prefab`, `Assets/_Presentation/Scenes/Level_01.unity`, importer исходного атласа. В `Assets/_Presentation/VFX/Blood/Hit/` созданы `HitBloodVfx.prefab`, `M_BloodImpact.mat`, `M_BloodDroplets.mat`, процедурная текстура `BloodDroplet.png` 64×64 и соответствующие .meta файлов/папок. Другие assets и пользовательские изменения TMP сохранены.
+
+Проверено Unity 6000.3.8f1: компиляция и сценарный PlayMode с графикой в изолированной копии, реальные столкновения пуль, промах/стена, повторные попадания, multi-target/multi-collider когти, legacy damage, native random atlas/неизменные UV, lifetime/гравитация, 10 врагов, 96 одновременных попаданий, предел 32 эффекта/352 частицы, возврат/повторное использование пула, отсутствие новых GameObject/Material и managed allocation в цикле воспроизведения. Проверены Grab execution/heal, Throw в стену/врага, урон 75/100, смерть/единственный Died, жизнь VFX после уничтожения врага, счётчик спавнера, ranged FSM, общий ProjectilePool и оба Muzzle Flash. Runtime errors: 0. Это сценарные проверки, не NUnit; замеры времени batch Editor не являются гарантией FPS игрового билда.
+
+Подробные результаты и замеры: `Logs/HitBlood-tests.txt`, `Logs/HitBlood-errors.txt`; снимки `Logs/HitBloodVisualReview/`, исходники проверок `Logs/HitBloodValidationSources/`, `git diff --stat` и список untracked — `Logs/HitBlood-git-diff-stat.txt`, `Logs/HitBlood-new-files.txt`. В основной Assets тестовые инструменты не добавлялись. Ручных назначений Inspector не требуется: открыть обновлённую Level_01 после импорта и запустить PlayMode. Death Burst, Decals, Gore, новые анимации и оружие не добавлялись; commit/reset/discard не выполнялись.
+
 ## 14.10.2026 — Muzzle Flash стреляющего полицейского
 
 В `Assets/_Source/EnemySystem/Combat/EnemyRangedAttack.cs` добавлены ссылка на существующий `MuzzleFlashVfx`, проверка результата checkout и вызов `Play()` сразу после `Projectile.Launch` в LateUpdate. Через Unity Editor API сохранён `Assets/_Presentation/Prefabs/RangeEnemy.prefab`: вложенный исходный `Assets/_Presentation/VFX/MuzzleFlash.prefab` находится в `View/mixamorig:Hips/.../mixamorig:RightHand/Glock-19 (1)/ShootPoint/MuzzleFlash`, local position/rotation = 0, scale = 1. ShootPoint, характеристики оружия, FSM, анимации и Player VFX не изменены. Общие материал, атлас и Bloom переиспользованы без изменений.

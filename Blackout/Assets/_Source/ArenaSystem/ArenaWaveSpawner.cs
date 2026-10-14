@@ -5,6 +5,7 @@ using CombatSystem;
 using EnemySystem;
 using ProjectileSystem;
 using UnityEngine;
+using VfxSystem;
 
 namespace ArenaSystem
 {
@@ -17,6 +18,7 @@ namespace ArenaSystem
         [Header("Enemy Runtime Dependencies")]
         [SerializeField] private Transform enemyTarget;
         [SerializeField] private ProjectilePool projectilePool;
+        [SerializeField] private HitBloodVfxPool hitBloodPool;
 
         [Header("Spawn Points")]
         [SerializeField] private List<Transform> spawnPoints = new();
@@ -162,7 +164,7 @@ namespace ArenaSystem
                 spawnedEnemiesParent
             );
 
-            EnemySpawnContext context = new(enemyTarget, projectilePool);
+            EnemySpawnContext context = new(enemyTarget, projectilePool, hitBloodPool);
             enemy.Initialize(context);
 
             Health enemyHealth = enemy.Health;

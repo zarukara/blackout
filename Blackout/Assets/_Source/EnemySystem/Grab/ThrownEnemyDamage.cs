@@ -66,7 +66,7 @@ namespace EnemySystem
 
             if (IsInLayerMask(otherLayer, wallLayer))
             {
-                HitWall();
+                HitWall(collision);
                 return;
             }
 
@@ -76,10 +76,10 @@ namespace EnemySystem
             }
         }
 
-        private void HitWall()
+        private void HitWall(Collision collision)
         {
             hasHit = true;
-            health.TakeDamage(damageToSelfOnWall);
+            ApplyImpactDamage(health, damageToSelfOnWall, collision, -collision.relativeVelocity);
             Deactivate();
         }
 
@@ -92,8 +92,8 @@ namespace EnemySystem
 
             hasHit = true;
 
-            otherHealth.TakeDamage(damageToOtherEnemy);
-            health.TakeDamage(damageToSelfOnEnemy);
+            ApplyImpactDamage(otherHealth, damageToOtherEnemy, collision, collision.relativeVelocity);
+            ApplyImpactDamage(health, damageToSelfOnEnemy, collision, -collision.relativeVelocity);
 
             Deactivate();
         }
@@ -101,6 +101,14 @@ namespace EnemySystem
         private bool IsInLayerMask(int layer, LayerMask layerMask)
         {
             return (layerMask.value & (1 << layer)) != 0;
+        }
+
+        private static void ApplyImpactDamage(Health target, int damage, Collision collision, Vector3 direction)
+        {
+            Vector3 point = collision.contactCount > 0
+                ? collision.GetContact(0).point
+                : target.transform.position + Vector3.up;
+            target.TakeDamage(damage, point, direction);
         }
     }
 }

@@ -327,6 +327,7 @@ GameObject:
   - component: {fileID: 112233445566778899}
   - component: {fileID: -6765875867943657882}
   - component: {fileID: 1536389727458988886}
+  - component: {fileID: 2962930480350323834}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -563,6 +564,7 @@ MonoBehaviour:
   context: {fileID: 8702981207485782310}
   meleeAttack: {fileID: 3112779369963210954}
   rangedAttack: {fileID: 0}
+  hitVfx: {fileID: 2962930480350323834}
 --- !u!114 &-6765875867943657882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -602,6 +604,19 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &2962930480350323834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051230306650694911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2260644c2a7646bcb40e97b5cb976008, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.EnemyHitVfx
+  fallbackHitPoint: {fileID: 160156884478052136}
 --- !u!1 &2265600943416329118
 GameObject:
   m_ObjectHideFlags: 0

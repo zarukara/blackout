@@ -14,6 +14,7 @@ namespace CombatSystem
         public bool IsDead { get; private set; }
 
         public event Action<int, int> HealthChanged;
+        public event Action<DamageInfo> Damaged;
         public event Action Died;
 
         private void Awake()
@@ -24,13 +25,28 @@ namespace CombatSystem
 
         public void TakeDamage(int damage)
         {
+            ApplyDamage(damage, Vector3.zero, Vector3.zero, false);
+        }
+
+        public void TakeDamage(int damage, Vector3 hitPoint, Vector3 hitDirection)
+        {
+            ApplyDamage(damage, hitPoint, hitDirection, true);
+        }
+
+        private void ApplyDamage(int damage, Vector3 hitPoint, Vector3 hitDirection, bool hasContact)
+        {
             if (IsDead || damage <= 0)
                 return;
 
+            int previousHealth = CurrentHealth;
             CurrentHealth -= damage;
             CurrentHealth = Mathf.Clamp(CurrentHealth, 0, maxHealth);
+            int appliedDamage = previousHealth - CurrentHealth;
 
             HealthChanged?.Invoke(CurrentHealth, maxHealth);
+
+            Damaged?.Invoke(new DamageInfo(
+                appliedDamage, CurrentHealth <= 0, hitPoint, hitDirection, hasContact));
 
             if (CurrentHealth <= 0)
             {

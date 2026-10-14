@@ -75,7 +75,7 @@ namespace WeaponSystem
             if (grabbedHealth == null || grabbedHealth.IsDead)
                 return true;
 
-            grabbedHealth.TakeDamage(damage);
+            DamageEnemy(grabbedHealth, grabbedEnemy.GetComponent<Collider>(), transform.position);
 
             if (grabbedHealth.IsDead)
                 HealPlayerAfterExecution();
@@ -110,8 +110,18 @@ namespace WeaponSystem
                 if (!damagedTargets.Add(health))
                     continue;
 
-                health.TakeDamage(damage);
+                DamageEnemy(health, hit, center);
             }
+        }
+
+        private void DamageEnemy(Health health, Collider hit, Vector3 origin)
+        {
+            Vector3 bodyCenter = hit != null ? hit.bounds.center : health.transform.position + Vector3.up;
+            origin.y = bodyCenter.y;
+            Vector3 point = hit != null ? hit.ClosestPoint(origin) : bodyCenter;
+            Vector3 direction = bodyCenter - origin;
+            if (direction.sqrMagnitude < 0.001f) direction = transform.forward;
+            health.TakeDamage(damage, point, direction.normalized);
         }
 
         private void HealPlayerAfterExecution()

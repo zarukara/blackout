@@ -86,7 +86,7 @@ namespace ProjectileSystem
             if (health == null)
                 return;
 
-            health.TakeDamage(damage);
+            health.TakeDamage(damage, other.ClosestPoint(transform.position), transform.forward);
         }
 
         private void ReturnToPool()
