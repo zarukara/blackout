@@ -1,5 +1,21 @@
 # BlackHost: combat / animation integration
 
+## 14.10.2026 — Muzzle Flash стреляющего полицейского
+
+В `Assets/_Source/EnemySystem/Combat/EnemyRangedAttack.cs` добавлены ссылка на существующий `MuzzleFlashVfx`, проверка результата checkout и вызов `Play()` сразу после `Projectile.Launch` в LateUpdate. Через Unity Editor API сохранён `Assets/_Presentation/Prefabs/RangeEnemy.prefab`: вложенный исходный `Assets/_Presentation/VFX/MuzzleFlash.prefab` находится в `View/mixamorig:Hips/.../mixamorig:RightHand/Glock-19 (1)/ShootPoint/MuzzleFlash`, local position/rotation = 0, scale = 1. ShootPoint, характеристики оружия, FSM, анимации и Player VFX не изменены. Общие материал, атлас и Bloom переиспользованы без изменений.
+
+Цепочка ArenaWaveSpawner → EnemySpawnContext → EnemyFacade → EnemyRangedAttack передаёт общий сценовый пул корректно; исправления пула не потребовались. В Level_01 нет вручную размещённых RangeEnemy. Отдельно проверен экземпляр с назначенными существующими сериализуемыми ссылками на пул и цель.
+
+Unity 6000.3.8f1: компиляция и графический сценарный PlayMode в изолированной копии текущего проекта, 0 runtime errors. Реальная навигация → остановка → стрельба; четыре врага сделали 15/8/8/8 автономных выстрелов, каждый с одной собственной вспышкой. Проверены урон, lifetime, 128 эмиссий со всеми четырьмя неизменными UV-кадрами (29/36/26/37), cooldown/нет цели/нет пула/ошибка checkout, Grab/Throw/recovery/смерть, отсутствие новых GameObject/ParticleSystem/Material при повторной стрельбе после прогрева пула, пистолет игрока и Weapon Wheel. GPU-сравнение Bloom: 3941 пиксель ореола вне яркого ядра. Это сценарные проверки, не NUnit и не полный регресс всей игры; melee проверен на отсутствие изменений prefab/кода.
+
+Результаты: `Logs/EnemyMuzzle-tests.txt`, `Logs/EnemyMuzzle-errors.txt`; снимки: `Logs/EnemyMuzzleVisualReview/`. Код проверок сохранён в `Logs/EnemyMuzzleValidationSources/`, в Assets тестовые инструменты не добавлены. Ручных назначений Inspector/Animator не требуется: дождаться импорта Unity и запустить PlayMode. Изменены только два указанных файла и этот статус; прежние незакоммиченные изменения сохранены. Git commit не выполнялся.
+
+## 14.10.2026 — Muzzle Flash пистолета игрока
+
+Поверх чистого HEAD `3a5db36` настроены существующие atlas/material/Particle System prefab, добавлен `WeaponSystem.MuzzleFlashVfx`, вызов после успешного Projectile.Launch и ссылки в Player prefab/Level_01. Одна частица на выстрел, один случайный неизменный кадр 2×2, Lifetime 0,06 с; HDR Emission и отдельный сценовый Bloom. GUID существующих assets сохранены, механика стрельбы и анимации не изменялись.
+
+Unity 6000.3.8f1: компиляция и сценарный PlayMode с графикой, 0 runtime errors. Проверены 256 эмиссий/все четыре кадра, стабильность UV, cooldown/отказы, повторные выстрелы, четыре направления, движение и реальная отрисовка Bloom. Полный отчёт, перечень файлов и ограничения — [MuzzleFlash_Implementation.md](MuzzleFlash_Implementation.md). Новых ручных назначений Inspector нет; после импорта перезагрузить ранее открытую сцену.
+
 ## 13.10.2026 — архитектурный рефакторинг
 
 Поверх чистого HEAD `be6edc6` просмотрены 57 собственных скриптов. Вынесены общий расчёт движения относительно камеры, данные/подготовка очереди волн и подключение компонентов игрока в PlayerFacade. Изменены шесть существующих C#-файлов, добавлены четыре типа с `.meta`; полный перечень и анализ — в [ArchitectureReview.md](ArchitectureReview.md).

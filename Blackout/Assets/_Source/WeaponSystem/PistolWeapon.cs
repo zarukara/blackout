@@ -10,6 +10,7 @@ namespace WeaponSystem
         [SerializeField] private ProjectilePool projectilePool;
         [SerializeField] private Transform firePoint;
         [SerializeField] private PlayerTargetingController targetingController;
+        [SerializeField] private MuzzleFlashVfx muzzleFlash;
 
         [Header("Stats")]
         [SerializeField] private int damage = 25;
@@ -46,6 +47,9 @@ namespace WeaponSystem
 
             Projectile projectile = projectilePool.GetProjectile();
 
+            if (projectile == null)
+                return;
+
             projectile.Launch(
                 firePoint.position,
                 direction,
@@ -53,6 +57,9 @@ namespace WeaponSystem
                 damage,
                 ownerObject
             );
+
+            if (muzzleFlash != null)
+                muzzleFlash.Play();
         }
 
         private Vector3 GetShootDirection()

@@ -475,6 +475,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20b1bfc3dcffbb64b9745ff9b9c2f744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UISystem.GameOverView
+--- !u!114 &56536989 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1310114879637076855, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+  m_PrefabInstance: {fileID: 593948420879275247}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b772177da9b4459b4e985f4a89843f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponSystem.MuzzleFlashVfx
+--- !u!1 &117871093
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 117871095}
+  - component: {fileID: 117871094}
+  m_Layer: 0
+  m_Name: Muzzle Flash Bloom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &117871094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117871093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 1
+  priority: 10
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: a39140649abbb83449c2a71484ad5173, type: 2}
+--- !u!4 &117871095
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117871093}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &133829895
 GameObject:
   m_ObjectHideFlags: 0
@@ -3774,7 +3834,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -7952,37 +8012,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1506836947}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!1 &1812179637
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1812179638}
-  m_Layer: 0
-  m_Name: ShootPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1812179638
+--- !u!4 &1812179638 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2005027838118163302, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+  m_PrefabInstance: {fileID: 593948420879275247}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1812179637}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.01156, y: 0.00015, z: 0.00112}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 593948420879275248}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1816709032
 GameObject:
   m_ObjectHideFlags: 0
@@ -9484,6 +9518,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3131449267787256425, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+      propertyPath: muzzleFlash
+      value: 
+      objectReference: {fileID: 56536989}
+    - target: {fileID: 3131449267787256425, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
       propertyPath: weaponVisual
       value: 
       objectReference: {fileID: 593948420879275248}
@@ -9696,10 +9734,8 @@ PrefabInstance:
     - {fileID: 6255814950903589738, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
     - {fileID: 9195456533844948965, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
     - {fileID: 2466393087480323299, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 2385688776503409802, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1812179638}
+    - {fileID: 4010833703843393999, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22ee460d9aec5ed4685c628dff58aedf, type: 3}
 --- !u!4 &593948420879275248 stripped
@@ -10259,3 +10295,4 @@ SceneRoots:
   - {fileID: 224202257}
   - {fileID: 1475584391}
   - {fileID: 1962032714}
+  - {fileID: 117871095}

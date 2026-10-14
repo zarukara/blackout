@@ -2,6 +2,7 @@ using CombatSystem;
 using ProjectileSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
+using WeaponSystem;
 
 namespace EnemySystem
 {
@@ -12,6 +13,7 @@ namespace EnemySystem
         [SerializeField] private Transform firePoint;
         [SerializeField] private Transform weaponVisual;
         [SerializeField] private Transform aimPivot;
+        [SerializeField] private MuzzleFlashVfx muzzleFlash;
 
         [Header("Stats")]
         [SerializeField] private int damage = 10;
@@ -77,7 +79,12 @@ namespace EnemySystem
             pendingTarget = null;
             if (!target.gameObject.activeInHierarchy || !IsTargetInRange(target) || projectilePool == null) return;
             Projectile projectile = projectilePool.GetProjectile();
+            if (projectile == null) return;
+
             projectile.Launch(firePoint.position, GetDirectionToTarget(target), projectileSpeed, damage, ownerObject);
+
+            if (muzzleFlash != null)
+                muzzleFlash.Play();
         }
 
         public bool CanAttack(Transform target)
