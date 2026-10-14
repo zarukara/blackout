@@ -15,6 +15,7 @@ namespace ProjectileSystem
 
         private ProjectilePool pool;
         private Rigidbody rigidbodyComponent;
+        private ProjectileVfx visuals;
 
         private int damage;
         private GameObject owner;
@@ -24,6 +25,7 @@ namespace ProjectileSystem
         private void Awake()
         {
             rigidbodyComponent = GetComponent<Rigidbody>();
+            visuals = GetComponent<ProjectileVfx>();
             PrepareRigidbody();
         }
 
@@ -67,6 +69,7 @@ namespace ProjectileSystem
             this.damage = damage;
             this.owner = owner;
 
+            visuals?.Clear();
             transform.position = position;
             transform.rotation = Quaternion.LookRotation(direction.normalized);
             transform.SetParent(null);
@@ -77,6 +80,7 @@ namespace ProjectileSystem
             rigidbodyComponent.linearVelocity = Vector3.zero;
             rigidbodyComponent.angularVelocity = Vector3.zero;
             rigidbodyComponent.linearVelocity = direction.normalized * speed;
+            visuals?.Play(lifetime);
         }
 
         private void TryDealDamage(Collider other)
