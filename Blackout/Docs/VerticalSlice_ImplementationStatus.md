@@ -1,5 +1,19 @@
 # BlackHost: combat / animation integration
 
+## 15.10.2026 — Bullet Projectile VFX завершён
+
+В общий `Assets/_Presentation/Prefabs/Bullet.prefab`, используемый Level_01, встроены BulletCore и BulletTrail. Одна локальная billboard-частица размером 0,14, Start Speed/Gravity = 0; Shape выключен, Scaling Mode = Shape сохраняет размер при исходном масштабе Bullet ×3. Trail: Time 0,08 с, Width 0,05 с сужением до нуля, Min Vertex Distance 0,02, Stretch, View alignment, alpha fade. Тени отключены. Старый MeshRenderer выключен; Rigidbody, Collider, lifetime, hitLayers и параметры оружия сохранены.
+
+Код: новый `Assets/_Source/ProjectileSystem/ProjectileVfx.cs`; в `Projectile.cs` добавлены кэширование компонента, очистка до перемещения и запуск после Launch. Checkout/OnEnable оставляет эффект пустым; после установки позиции запускается одна частица на срок жизни пули и включается след. OnDisable при возврате в пул останавливает/очищает частицы и выключает/очищает TrailRenderer. ProjectilePool и оба оружия не изменены.
+
+Созданы через Unity Editor API: `Assets/_Presentation/VFX/Bullet/T_BulletGlow.png`, `T_BulletTrail.png` (процедурные RGBA 64×64), `M_BulletGlow.mat`, `M_BulletTrail.mat` и соответствующие .meta. Материалы URP Particles/Unlit, Additive, HDR Emission RGB соответственно (4; 3,8; 3,2) и (2,5; 2,3; 1,8). Использован существующий Bloom без изменения Volume/URP/экспозиции. Все ссылки в prefab назначены.
+
+Проверено Unity 6000.3.8f1 в изолированной копии Level_01: компиляция и 68 сценарных PlayMode-проверок, 0 runtime errors. Проверены пять запусков одного экземпляра из удалённых точек, очистка на checkout/return/active relaunch/истечении lifetime/попадании, положение следа позади пули, стабильное ядро, реальные выстрелы игрока и ranged FSM, исходный урон обеих сторон, кровь с привязкой к врагу, летальная пуля/Dead state, Weapon Wheel. Серия 30 выстрелов сохранила исходные 20 projectile instances и количество материалов 101 → 101.
+
+Визуальная проверка выполнена по GPU-снимкам Camera.main из графического batch PlayMode (RTX 3070): четыре направления, повёрнутая камера, общий план/крупный план, игрок/полицейский, кровь после попадания. Сравнение одного кадра с Bloom/без него подтвердило свечение. Это не ручная интерактивная проверка окна Game View и не NUnit-тесты. Результаты: `Logs/Bullet-tests.txt`, `Logs/Bullet-errors.txt`; изображения: `Logs/BulletVisualReview/`; воспроизводимые временные инструменты сохранены вне Assets в `Logs/BulletValidationSources/`. Временного проекта `Temp/BulletValidation` больше нет.
+
+Ручных назначений Inspector/Animator нет. Открыть Level_01, дождаться импорта Unity, выбрать пистолет и стрелять. Реализация уже присутствует в текущем HEAD `dc8392b` (13 файлов, +5592/−2, включая Unity-сериализацию и .meta); агент Git commit не выполнял. Исходная база задачи — `9ff3b9a`. Текущие посторонние изменения TMP и Assets/_Recovery сохранены.
+
 ## 14.10.2026 — следование Hit Blood за врагом
 
 Основной ImpactSplash переведён в Local simulation и следует за точкой попадания относительно Chest в LateUpdate после анимации/наведения. Капли остаются в World simulation и продолжают собственные траектории. При отключении/уничтожении цели эффект заканчивается на последней позиции; при возврате в пул ссылка на цель очищается. Изменены `EnemyHitVfx.cs`, `HitBloodVfxPool.cs`, `HitBloodVfx.cs` и одна настройка в `HitBloodVfx.prefab`.
