@@ -19,6 +19,7 @@ namespace ArenaSystem
         [SerializeField] private Transform enemyTarget;
         [SerializeField] private ProjectilePool projectilePool;
         [SerializeField] private HitBloodVfxPool hitBloodPool;
+        [SerializeField] private DeathVfxPool deathVfxPool;
 
         [Header("Spawn Points")]
         [SerializeField] private List<Transform> spawnPoints = new();
@@ -164,7 +165,7 @@ namespace ArenaSystem
                 spawnedEnemiesParent
             );
 
-            EnemySpawnContext context = new(enemyTarget, projectilePool, hitBloodPool);
+            EnemySpawnContext context = new(enemyTarget, projectilePool, hitBloodPool, deathVfxPool);
             enemy.Initialize(context);
 
             Health enemyHealth = enemy.Health;

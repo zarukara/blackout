@@ -14,6 +14,7 @@ namespace EnemySystem
         [SerializeField] private EnemyMeleeAttack meleeAttack;
         [SerializeField] private EnemyRangedAttack rangedAttack;
         [SerializeField] private EnemyHitVfx hitVfx;
+        [SerializeField] private EnemyDeathVfx deathVfx;
 
         public Health Health => health;
         public EnemyContext Context => context;
@@ -47,6 +48,8 @@ namespace EnemySystem
 
             if (hitVfx == null)
                 hitVfx = GetComponentInChildren<EnemyHitVfx>(true);
+            if (deathVfx == null)
+                deathVfx = GetComponentInChildren<EnemyDeathVfx>(true);
         }
 
         public void Initialize(EnemySpawnContext spawnContext)
@@ -63,6 +66,8 @@ namespace EnemySystem
 
             if (hitVfx != null)
                 hitVfx.Initialize(spawnContext.HitBloodPool);
+            if (deathVfx != null)
+                deathVfx.Initialize(spawnContext.DeathVfxPool);
         }
 
         public bool IsValid()

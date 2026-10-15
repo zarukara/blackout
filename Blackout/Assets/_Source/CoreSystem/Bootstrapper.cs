@@ -13,6 +13,7 @@ namespace CoreSystem
         [SerializeField] private PlayerInputReader inputReader;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private HitBloodVfxPool hitBloodPool;
+        [SerializeField] private DeathVfxPool deathVfxPool;
 
         [Header("Player")]
         [SerializeField] private PlayerFacade player;
@@ -43,6 +44,8 @@ namespace CoreSystem
             // Scene-placed enemies are wired once; spawned enemies use EnemySpawnContext.
             foreach (EnemyHitVfx hitVfx in FindObjectsByType<EnemyHitVfx>(FindObjectsInactive.Include, FindObjectsSortMode.None))
                 hitVfx.Initialize(hitBloodPool);
+            foreach (EnemyDeathVfx deathVfx in FindObjectsByType<EnemyDeathVfx>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                deathVfx.Initialize(deathVfxPool);
         }
 
         private void ResolvePlayer()

@@ -11,9 +11,14 @@ namespace EnemySystem
         [SerializeField] private Transform fallbackHitPoint;
 
         private Health health;
+        private EnemyDeathVfx deathVfx;
         private HitBloodVfxPool pool;
 
-        private void Awake() => health = GetComponent<Health>();
+        private void Awake()
+        {
+            health = GetComponent<Health>();
+            deathVfx = GetComponent<EnemyDeathVfx>();
+        }
         private void OnEnable() => health.Damaged += OnDamaged;
         private void OnDisable() => health.Damaged -= OnDamaged;
 
@@ -25,8 +30,8 @@ namespace EnemySystem
         private void OnDamaged(DamageInfo hit)
         {
             if (pool == null || hit.Amount <= 0) return;
+            if (hit.IsLethal && deathVfx != null && deathVfx.IsReady) return;
 
-            // IsLethal is available here for a future exclusive death-effect branch.
             Vector3 point = hit.HasContact ? hit.Point
                 : fallbackHitPoint != null ? fallbackHitPoint.position : transform.position + Vector3.up;
             Vector3 direction = hit.HasContact ? hit.Direction : transform.forward;

@@ -328,6 +328,7 @@ GameObject:
   - component: {fileID: -6765875867943657882}
   - component: {fileID: 1536389727458988886}
   - component: {fileID: 2962930480350323834}
+  - component: {fileID: 2751897376872511415}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -565,6 +566,7 @@ MonoBehaviour:
   meleeAttack: {fileID: 3112779369963210954}
   rangedAttack: {fileID: 0}
   hitVfx: {fileID: 2962930480350323834}
+  deathVfx: {fileID: 2751897376872511415}
 --- !u!114 &-6765875867943657882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -617,6 +619,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.EnemyHitVfx
   fallbackHitPoint: {fileID: 160156884478052136}
+--- !u!114 &2751897376872511415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051230306650694911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58377f1e7eb2f8d48ad5f071c6f7fe43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.EnemyDeathVfx
+  bodyPoint: {fileID: 160156884478052136}
+  visualRenderers:
+  - {fileID: 1300233979920580933}
+  - {fileID: 6532444319535744081}
+  localParticles: []
 --- !u!1 &2265600943416329118
 GameObject:
   m_ObjectHideFlags: 0

@@ -1668,6 +1668,59 @@ MonoBehaviour:
   - {fileID: 1546402291}
   - {fileID: 1495648988}
   - {fileID: 1641637245}
+--- !u!1 &416791670
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 416791672}
+  - component: {fileID: 416791671}
+  m_Layer: 0
+  m_Name: Enemy Death VFX Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &416791671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416791670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0962e67b3c28a04380a8cee54d5c487, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VfxSystem.DeathVfxPool
+  burstPrefab: {fileID: 5253507454954061469, guid: b09b41d36fca55945be7260478ab3c5a, type: 3}
+  bloodPoolPrefab: {fileID: 4789317229314081431, guid: 2d246ff8e9008f041a02a066f51550b5, type: 3}
+  burstCapacity: 12
+  bloodPoolCapacity: 40
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  groundRayDistance: 50
+  surfaceOffset: 0.015
+--- !u!4 &416791672
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416791670}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &456732995
 GameObject:
   m_ObjectHideFlags: 0
@@ -4576,6 +4629,7 @@ MonoBehaviour:
   inputReader: {fileID: 789952520}
   mainCamera: {fileID: 963194227}
   hitBloodPool: {fileID: 914653537}
+  deathVfxPool: {fileID: 416791671}
   player: {fileID: 593948420879275274}
   ui: {fileID: 1374624805}
   cameraRotationController: {fileID: 1816709038}
@@ -5562,6 +5616,7 @@ MonoBehaviour:
   enemyTarget: {fileID: 1242824110}
   projectilePool: {fileID: 1029824952}
   hitBloodPool: {fileID: 914653537}
+  deathVfxPool: {fileID: 416791671}
   spawnPoints:
   - {fileID: 1456115357}
   - {fileID: 2020430269}
@@ -10345,3 +10400,4 @@ SceneRoots:
   - {fileID: 1962032714}
   - {fileID: 117871095}
   - {fileID: 914653538}
+  - {fileID: 416791672}

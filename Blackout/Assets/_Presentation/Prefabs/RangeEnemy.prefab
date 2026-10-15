@@ -1827,6 +1827,7 @@ GameObject:
   - component: {fileID: 1855663618914741306}
   - component: {fileID: 624932852239969688}
   - component: {fileID: 7560367014301232129}
+  - component: {fileID: 1458752858483304941}
   m_Layer: 7
   m_Name: RangeEnemy
   m_TagString: Untagged
@@ -2109,6 +2110,7 @@ MonoBehaviour:
   meleeAttack: {fileID: 0}
   rangedAttack: {fileID: 8321027150096054423}
   hitVfx: {fileID: 7560367014301232129}
+  deathVfx: {fileID: 1458752858483304941}
 --- !u!195 &1855663618914741306
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2162,6 +2164,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.EnemyHitVfx
   fallbackHitPoint: {fileID: 5242153552123496675}
+--- !u!114 &1458752858483304941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6586494834225879713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58377f1e7eb2f8d48ad5f071c6f7fe43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySystem.EnemyDeathVfx
+  bodyPoint: {fileID: 5242153552123496675}
+  visualRenderers:
+  - {fileID: 7924403802065520752}
+  - {fileID: 7342345610021256552}
+  - {fileID: 2070426568668651234}
+  localParticles:
+  - {fileID: 6763780931973395669}
 --- !u!1 &6689656272796046996
 GameObject:
   m_ObjectHideFlags: 0
@@ -2781,6 +2802,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8977357429609446410, guid: 0c6744f52b24656448ea58189a3d63db, type: 3}
   m_PrefabInstance: {fileID: 3388706521337389100}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &7924403802065520752 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4827359507548186716, guid: 0c6744f52b24656448ea58189a3d63db, type: 3}
+  m_PrefabInstance: {fileID: 3388706521337389100}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8658858476430786603
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2852,5 +2878,15 @@ MonoBehaviour:
 --- !u!4 &4962913041989311691 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4392626973577616608, guid: df6961ee2a648a645879e2004990ef29, type: 3}
+  m_PrefabInstance: {fileID: 8658858476430786603}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6763780931973395669 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2735856524526892286, guid: df6961ee2a648a645879e2004990ef29, type: 3}
+  m_PrefabInstance: {fileID: 8658858476430786603}
+  m_PrefabAsset: {fileID: 0}
+--- !u!199 &7342345610021256552 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 2147989999671229763, guid: df6961ee2a648a645879e2004990ef29, type: 3}
   m_PrefabInstance: {fileID: 8658858476430786603}
   m_PrefabAsset: {fileID: 0}
