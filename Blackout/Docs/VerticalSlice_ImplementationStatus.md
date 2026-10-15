@@ -1,5 +1,11 @@
 # BlackHost: combat / animation integration
 
+## 15.10.2026 — жёлтый трассер без круглой головки
+
+Изменены только `Bullet.prefab` и `M_BulletTrail.mat`: Base Color RGB (1; 0,78; 0), HDR Emission (4; 3; 0). Отображение круглого BulletCore отключено через ParticleSystemRenderer; Trail Renderer имеет заострённый передний край, без круглых caps, максимальную ширину 0,07 и прежний lifetime 0,08 с. C#, пул, урон, физика и глобальный Bloom не изменены. Ручных назначений нет.
+
+Unity 6000.3.8f1: компиляция и 7 проверок графического PlayMode; итоговый прогон без runtime/editor errors. Просмотрены GPU-снимки реального выстрела, четырёх направлений, повёрнутой камеры и крупного плана; жёлтый след читается без отдельного шара на конце. Результаты: `Logs/BulletStyle-tests.txt`, `Logs/BulletStyleVisualReview/`. В первом прогоне возникло исключение внутреннего UnityEditor.Search при индексации; оно сохранено в `Logs/BulletStyle-first-run-editor-errors.txt`, в итоговом прогоне не повторилось.
+
 ## 15.10.2026 — Bullet Projectile VFX завершён
 
 В общий `Assets/_Presentation/Prefabs/Bullet.prefab`, используемый Level_01, встроены BulletCore и BulletTrail. Одна локальная billboard-частица размером 0,14, Start Speed/Gravity = 0; Shape выключен, Scaling Mode = Shape сохраняет размер при исходном масштабе Bullet ×3. Trail: Time 0,08 с, Width 0,05 с сужением до нуля, Min Vertex Distance 0,02, Stretch, View alignment, alpha fade. Тени отключены. Старый MeshRenderer выключен; Rigidbody, Collider, lifetime, hitLayers и параметры оружия сохранены.
